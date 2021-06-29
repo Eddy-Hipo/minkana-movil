@@ -16,7 +16,9 @@ export const ToastProvider = ({ children }) => {
   const addToast = useCallback(
     function (newToast) {
       console.log("new Toast", newToast);
-      setToast((prevToast) => ({ ...prevToast, ...newToast }));
+      const newMessage = "\n" + newToast.message;
+      const newToast2 = { ...newToast, message: newMessage };
+      setToast((prevToast) => ({ ...prevToast, ...newToast2 }));
       setShowToast(true);
     },
     [setToast]

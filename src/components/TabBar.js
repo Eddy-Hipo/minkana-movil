@@ -2,9 +2,8 @@ import React from "react";
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar";
 import Icon from "react-native-vector-icons/AntDesign";
 import HomeScreen from "../screens/HomeScreen";
-import RecipesScreen from "../screens/RecipesScreen";
-import PlanScreen from "../screens/PlanScreen";
 import StatisticsScreen from "../screens/StatisticsScreen";
+import ReportScreen from "../screens/ReportScreen";
 
 const TabBar = () => {
   const Tab = AnimatedTabBarNavigator();
@@ -31,26 +30,12 @@ const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="Recetas"
-        component={RecipesScreen}
+        name="Reportes"
+        component={ReportScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Icon
               name="filetext1"
-              size={size ? size : 24}
-              color={focused ? color : "#222222"}
-              focused={focused}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Plan"
-        component={PlanScreen}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Icon
-              name="calendar"
               size={size ? size : 24}
               color={focused ? color : "#222222"}
               focused={focused}

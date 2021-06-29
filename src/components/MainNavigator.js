@@ -10,15 +10,14 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import TabBar from "./TabBar";
-import RecipesScreen from "../screens/RecipesScreen";
-import PlanScreen from "../screens/PlanScreen";
 import StatisticsScreen from "../screens/StatisticsScreen";
+import UserProfileScreen from "../screens/UserProfileScreen";
 import { useAuth } from "../utils/auth";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const MainStackNavigator = () => {
+const MainStackNavigator = ({ navigation }) => {
   const { user } = useAuth();
   return (
     <Stack.Navigator>
@@ -49,19 +48,14 @@ const MainStackNavigator = () => {
         )}
       </Stack.Screen>
       <Stack.Screen
-        name="RecipesScreen"
-        component={RecipesScreen}
-        options={{ headerTitle: "Example 1" }}
+        name="UserProfile"
+        component={UserProfileScreen}
+        options={{ headerTitle: "Perfil" }}
       />
       <Stack.Screen
-        name="PlanScreen"
-        component={PlanScreen}
-        options={{ headerTitle: "Example 1" }}
-      />
-      <Stack.Screen
-        name="StatisticsScreen"
+        name="Statistics"
         component={StatisticsScreen}
-        options={{ headerTitle: "Example 1" }}
+        options={{ headerTitle: "Estadísticas" }}
       />
     </Stack.Navigator>
   );
@@ -98,6 +92,7 @@ const MainNavigator = ({ username, logoutAction }) => {
       <Drawer.Screen name="Inicio">
         {() => <MainStackNavigator username={username} />}
       </Drawer.Screen>
+      <Drawer.Screen name="Perfil" component={UserProfileScreen} />
     </Drawer.Navigator>
   );
 };

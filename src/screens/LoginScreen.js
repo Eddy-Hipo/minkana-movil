@@ -17,6 +17,7 @@ import { useToast } from "../utils/toast";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
+import { LinearGradient } from "expo-linear-gradient";
 
 const schema = yup.object().shape({
   email: yup
@@ -53,80 +54,98 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {loading && <Loading />}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
-            <Text h1>Iniciar sesión</Text>
-            <Controller
-              control={control}
-              name="email"
-              defaultValue=""
-              onFocus={() => {
-                emailRef.current.focus();
-              }}
-              render={({ onChange, value }) => (
-                <TextField
-                  value={value}
-                  placeholder="Email"
-                  autoCapitalize={"none"}
-                  autoCorrect={false}
-                  textContentType={"emailAddress"}
-                  autoCompleteType={"email"}
-                  onChangeText={(value) => onChange(value)}
-                  keyboardType={"email-address"}
-                  returnKeyType={"next"}
-                  onSubmitEditing={() => passwordRef.current.focus()}
-                  ref={emailRef}
-                  error={errors.email?.message}
-                  enableErrors={!!errors?.email}
+    <>
+      <View style={{ backgroundColor: "#3D405B", height: "100%" }}>
+        <SafeAreaView style={styles.itemContainer2}>
+          <LinearGradient
+            // Background Linear Gradient
+            colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
+            style={styles.background}
+          />
+          {loading && <Loading />}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "position" : "height"}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View>
+                <Text h1>Iniciar sesión</Text>
+                <Controller
+                  control={control}
+                  name="email"
+                  defaultValue=""
+                  onFocus={() => {
+                    emailRef.current.focus();
+                  }}
+                  render={({ onChange, value }) => (
+                    <TextField
+                      value={value}
+                      placeholder="Email"
+                      autoCapitalize={"none"}
+                      autoCorrect={false}
+                      textContentType={"emailAddress"}
+                      autoCompleteType={"email"}
+                      onChangeText={(value) => onChange(value)}
+                      keyboardType={"email-address"}
+                      returnKeyType={"next"}
+                      onSubmitEditing={() => passwordRef.current.focus()}
+                      ref={emailRef}
+                      error={errors.email?.message}
+                      enableErrors={!!errors?.email}
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Controller
-              control={control}
-              name="password"
-              defaultValue=""
-              render={({ onChange, value }) => (
-                <TextField
-                  secureTextEntry={true}
-                  placeholder="Clave"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
-                  error={errors.password?.message}
-                  ref={passwordRef}
-                  enableErrors={!!errors?.password}
+                <Controller
+                  control={control}
+                  name="password"
+                  defaultValue=""
+                  render={({ onChange, value }) => (
+                    <TextField
+                      secureTextEntry={true}
+                      placeholder="Clave"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      error={errors.password?.message}
+                      ref={passwordRef}
+                      enableErrors={!!errors?.password}
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Button
-              label="Iniciar sesión"
-              enableShadow
-              onPress={handleSubmit(onLogin)}
-              disabled={loading}
-            />
-            <Button
-              link
-              label={"¿Olvidaste tu clave?"}
-              onPress={() => navigation.navigate("RecoverPasswordScreen")}
-            />
-            <Button
-              link
-              labelStyle={{ fontWeight: "bold", fontSize: 20 }}
-              label={"Crear una cuenta"}
-              onPress={() => navigation.navigate("RegisterScreen")}
-            />
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+                <Button
+                  label="Iniciar sesión"
+                  labelStyle={{ fontWeight: "bold", fontSize: 20, padding: 5 }}
+                  enableShadow
+                  onPress={handleSubmit(onLogin)}
+                  disabled={loading}
+                  style={{
+                    backgroundColor: "#E07A5F",
+                    margin: 20,
+                    marginTop: 45,
+                  }}
+                />
+                <Button
+                  link
+                  color="white"
+                  labelStyle={{ fontWeight: "bold", fontSize: 18 }}
+                  label={"¿Olvidaste tu clave?"}
+                  onPress={() => navigation.navigate("RecoverPasswordScreen")}
+                />
+                <Button
+                  link
+                  color="white"
+                  labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                  label={"Crear una cuenta"}
+                  onPress={() => navigation.navigate("RegisterScreen")}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </View>
+    </>
   );
 };
 LoginScreen.propTypes = {
