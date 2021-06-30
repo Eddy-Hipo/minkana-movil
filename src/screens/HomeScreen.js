@@ -27,6 +27,11 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
+      <LinearGradient
+        // Background Linear Gradient
+        colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
+        style={styles.background2}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Button
           label="Generar un reporte"

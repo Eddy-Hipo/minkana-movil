@@ -7,7 +7,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useAuth } from "../utils/auth";
 import { LinearGradient } from "expo-linear-gradient";
 
-const UserProfileScreen = ({ navigation }) => {
+const EditUserProfileScreen = ({ navigation }) => {
   const { user } = useAuth();
 
   return (
@@ -30,14 +30,14 @@ const UserProfileScreen = ({ navigation }) => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Inicio");
+                navigation.navigate("UserProfile");
               }}
               style={{ flex: 0.1 }}
             >
               <Ionicons name="arrow-back-outline" size={35} color="white" />
             </TouchableOpacity>
             <Text white center h2 style={{ flex: 0.75 }}>
-              Perfil
+              Actualizar Perfil
             </Text>
             <Text center h2 style={{ flex: 0.15 }} />
           </View>
@@ -94,7 +94,7 @@ const UserProfileScreen = ({ navigation }) => {
             <Button
               label="Actualizar Perfil"
               onPress={() => {
-                navigation.navigate("EditUserProfile");
+                navigation.navigate("Reportes");
               }}
             />
           </View>
@@ -104,4 +104,4 @@ const UserProfileScreen = ({ navigation }) => {
   );
 };
 
-export default UserProfileScreen;
+export default EditUserProfileScreen;

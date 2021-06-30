@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
+import { Picker } from "@react-native-picker/picker";
 
 const schema = yup.object().shape({
   name: yup.string().required("Ingresa tu nombre"),
@@ -24,11 +25,9 @@ const schema = yup.object().shape({
   age: yup
     .string()
     .required("Ingrese una edad")
-    .length(2, "La edad debe ser de 2 digitos.")
     .test("", "La edad debe estar entre 18 a 65 años.", (value) => {
       return value >= 18 && value <= 65;
     }),
-
   email: yup
     .string()
     .required("Ingresa tu correo electrónico")
@@ -51,19 +50,38 @@ const RegisterScreen = ({ navigation }) => {
   const { register } = useAuth();
   const [loading, setLoading] = useState(false);
   const addToast = useToast();
+  const [selectedValueGender, setSelectedValueGender] = useState("");
+  const [validationGender, setValidationGender] = useState(true);
+
+  useEffect(() => {
+    setValidationGender(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedValueGender !== "") {
+      setValidationGender(true);
+    } else {
+      setValidationGender(false);
+    }
+  }, [selectedValueGender]);
 
   const onCreate = async (data) => {
-    console.log("Datos de registro:", data);
-    setLoading(true);
-    try {
-      await register(data);
-    } catch (error) {
-      addToast({
-        position: "top",
-        backgroundColor: "#CC0000",
-        message: translateMessage(error.code),
-      });
-      setLoading(false);
+    //console.log("Datos de registro:", data);
+    //setLoading(true);
+
+    if (validationGender) {
+      try {
+        //await register(data);
+        console.log("DAtos con create", data);
+        console.log("valorgenero", selectedValueGender);
+      } catch (error) {
+        addToast({
+          position: "top",
+          backgroundColor: "#CC0000",
+          message: translateMessage(error.code),
+        });
+        setLoading(false);
+      }
     }
   };
 
@@ -179,6 +197,36 @@ const RegisterScreen = ({ navigation }) => {
                       />
                     )}
                   />
+
+                  <>
+                    <Text marginT-10 style={{ marginBottom: -10 }}>
+                      Escoja un genero
+                    </Text>
+                    <View style={styles.textFileRegister}>
+                      <Picker
+                        placeholder={selectedValueGender}
+                        selectedValue={selectedValueGender}
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          color: "black",
+                        }}
+                        onValueChange={(value, itemIndex) =>
+                          setSelectedValueGender(value)
+                        }
+                      >
+                        <Picker.Item label="Género" value="" />
+                        <Picker.Item label="Masculino" value="Masculino" />
+                        <Picker.Item label="Femenino" value="Femenino" />
+                      </Picker>
+                      {!validationGender ? (
+                        <Text h6 style={{ color: "red" }}>
+                          ingrese un valor para genero
+                        </Text>
+                      ) : null}
+                    </View>
+                  </>
+
                   <Controller
                     control={control}
                     name="password"

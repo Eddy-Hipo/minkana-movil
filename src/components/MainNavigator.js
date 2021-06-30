@@ -12,6 +12,7 @@ import {
 import TabBar from "./TabBar";
 import StatisticsScreen from "../screens/StatisticsScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
+import EditUserProfileScreen from "../screens/UserProfileScreen";
 import { useAuth } from "../utils/auth";
 
 const Stack = createStackNavigator();
@@ -52,6 +53,12 @@ const MainStackNavigator = ({ navigation }) => {
         component={UserProfileScreen}
         options={{ headerTitle: "Perfil" }}
       />
+      <Stack.Screen
+        name="EditUserProfile"
+        component={EditUserProfileScreen}
+        options={{ headerTitle: "Actualziar Perfil" }}
+      />
+
       <Stack.Screen
         name="Statistics"
         component={StatisticsScreen}
