@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -16,16 +16,25 @@ import translateMessage from "../utils/translateMessage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
+import { LinearGradient } from "expo-linear-gradient";
+import { Picker } from "@react-native-picker/picker";
 
 const schema = yup.object().shape({
   name: yup.string().required("Ingresa tu nombre"),
+  lastname: yup.string().required("Ingresa tu apellido"),
+  age: yup
+    .string()
+    .required("Ingrese una edad")
+    .test("", "La edad debe estar entre 18 a 65 años.", (value) => {
+      return value >= 18 && value <= 65;
+    }),
   email: yup
     .string()
     .required("Ingresa tu correo electrónico")
     .email("Ingresa un correo electrónico válido"),
   password: yup
     .string()
-    .required("Ingresa tu clave")
+    .required("Ingresa tu contraseña")
     .min(6, "Ingresa como mínimo 6 caracteres"),
 });
 
@@ -34,124 +43,246 @@ const RegisterScreen = ({ navigation }) => {
     resolver: yupResolver(schema),
   });
   let nameRef = React.useRef();
+  let lastnameRef = React.useRef();
   let emailRef = React.useRef();
+  let ageRef = React.useRef();
   let passwordRef = React.useRef();
   const { register } = useAuth();
   const [loading, setLoading] = useState(false);
   const addToast = useToast();
+  const [selectedValueGender, setSelectedValueGender] = useState("");
+  const [validationGender, setValidationGender] = useState(true);
+
+  useEffect(() => {
+    setValidationGender(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedValueGender !== "") {
+      setValidationGender(true);
+    } else {
+      setValidationGender(false);
+    }
+  }, [selectedValueGender]);
 
   const onCreate = async (data) => {
-    console.log("Datos de registro:", data);
-    setLoading(true);
-    try {
-      await register(data);
-    } catch (error) {
-      addToast({
-        position: "top",
-        backgroundColor: "#CC0000",
-        message: translateMessage(error.code),
-      });
-      setLoading(false);
+    //console.log("Datos de registro:", data);
+    //setLoading(true);
+
+    if (validationGender) {
+      try {
+        //await register(data);
+        console.log("DAtos con create", data);
+        console.log("valorgenero", selectedValueGender);
+      } catch (error) {
+        addToast({
+          position: "top",
+          backgroundColor: "#CC0000",
+          message: translateMessage(error.code),
+        });
+        setLoading(false);
+      }
     }
   };
-  return (
-    <SafeAreaView style={styles.container}>
-      {loading && <Loading />}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
-            <View>
-              <Text h1>Crear una cuenta</Text>
-              <Controller
-                control={control}
-                name="name"
-                rules={{ required: "Ingresa tu nombre" }}
-                defaultValue=""
-                onFocus={() => {
-                  nameRef.current.focus();
-                }}
-                render={(props) => (
-                  <TextField
-                    placeholder="Nombre"
-                    autoCapitalize="words"
-                    autoCorrect={false}
-                    onChangeText={(value) => props.onChange(value)}
-                    returnKeyType={"next"}
-                    onSubmitEditing={() => nameRef.current.focus()}
-                    ref={nameRef}
-                    error={errors.name?.message}
-                    enableErrors={!!errors.name}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="email"
-                rules={{ required: "Ingresa tu correo" }}
-                defaultValue=""
-                onFocus={() => {
-                  emailRef.current.focus();
-                }}
-                render={(props) => (
-                  <TextField
-                    placeholder="Correo electrónico"
-                    autoCapitalize={"none"}
-                    autoCorrect={false}
-                    textContentType={"emailAddress"}
-                    autoCompleteType={"email"}
-                    onChangeText={(value) => props.onChange(value)}
-                    keyboardType={"email-address"}
-                    returnKeyType={"next"}
-                    onSubmitEditing={() => passwordRef.current.focus()}
-                    ref={emailRef}
-                    error={errors.email?.message}
-                    enableErrors={!!errors.email}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="password"
-                defaultValue=""
-                onFocus={() => {
-                  passwordRef.current.focus();
-                }}
-                render={(props) => (
-                  <TextField
-                    placeholder="Clave"
-                    autoCapitalize={"none"}
-                    autoCorrect={false}
-                    textContentType={"password"}
-                    secureTextEntry={true}
-                    ref={passwordRef}
-                    returnKeyType="go"
-                    onChangeText={(value) => props.onChange(value)}
-                    error={errors.password?.message}
-                    enableErrors={!!errors.password}
-                  />
-                )}
-              />
-            </View>
 
-            <View>
-              <Button
-                margin-15
-                label="Crear mi cuenta"
-                onPress={handleSubmit(onCreate)}
-              />
-              <Button
-                margin-5
-                link
-                label="Iniciar sesión"
-                onPress={() => navigation.navigate("LoginScreen")}
-              />
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+  return (
+    <>
+      <View style={{ backgroundColor: "#3D405B", height: "100%" }}>
+        <SafeAreaView style={styles.itemContainer2}>
+          <LinearGradient
+            // Background Linear Gradient
+            colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
+            style={styles.background}
+          />
+          {loading && <Loading />}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "position" : "height"}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View>
+                <View>
+                  <Text h1>Crear una cuenta</Text>
+                  <View row spread>
+                    <Controller
+                      control={control}
+                      name="name"
+                      rules={{ required: "Ingresa tu nombre" }}
+                      defaultValue=""
+                      onFocus={() => {
+                        nameRef.current.focus();
+                      }}
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFileRegister}
+                          placeholder="Nombre"
+                          autoCapitalize="words"
+                          autoCorrect={false}
+                          onChangeText={(value) => props.onChange(value)}
+                          returnKeyType={"next"}
+                          onSubmitEditing={() => lastnameRef.current.focus()}
+                          ref={nameRef}
+                          error={errors.name?.message}
+                          enableErrors={!!errors.name}
+                        />
+                      )}
+                    />
+                    <Controller
+                      control={control}
+                      name="lastname"
+                      rules={{ required: "Ingresa tu apellido" }}
+                      defaultValue=""
+                      onFocus={() => {
+                        lastnameRef.current.focus();
+                      }}
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFileRegister}
+                          placeholder="Apellido"
+                          autoCapitalize="words"
+                          autoCorrect={false}
+                          onChangeText={(value) => props.onChange(value)}
+                          returnKeyType={"next"}
+                          onSubmitEditing={() => emailRef.current.focus()}
+                          ref={lastnameRef}
+                          error={errors.lastname?.message}
+                          enableErrors={!!errors.lastname}
+                        />
+                      )}
+                    />
+                  </View>
+                  <Controller
+                    control={control}
+                    name="email"
+                    rules={{ required: "Ingresa tu correo" }}
+                    defaultValue=""
+                    onFocus={() => {
+                      emailRef.current.focus();
+                    }}
+                    render={(props) => (
+                      <TextField
+                        placeholder="Correo electrónico"
+                        autoCapitalize={"none"}
+                        autoCorrect={false}
+                        textContentType={"emailAddress"}
+                        autoCompleteType={"email"}
+                        onChangeText={(value) => props.onChange(value)}
+                        keyboardType={"email-address"}
+                        returnKeyType={"next"}
+                        onSubmitEditing={() => ageRef.current.focus()}
+                        ref={emailRef}
+                        error={errors.email?.message}
+                        enableErrors={!!errors.email}
+                      />
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="age"
+                    defaultValue=""
+                    onFocus={() => {
+                      ageRef.current.focus();
+                    }}
+                    render={(props) => (
+                      <TextField
+                        style={styles.textFileRegister}
+                        placeholder="Edad"
+                        autoCorrect={false}
+                        onChangeText={(value) => props.onChange(value)}
+                        returnKeyType={"next"}
+                        onSubmitEditing={() => passwordRef.current.focus()}
+                        ref={ageRef}
+                        error={errors.age?.message}
+                        enableErrors={!!errors.age}
+                        keyboardType="numeric"
+                      />
+                    )}
+                  />
+
+                  <>
+                    <Text marginT-10 style={{ marginBottom: -10 }}>
+                      Escoja un genero
+                    </Text>
+                    <View style={styles.textFileRegister}>
+                      <Picker
+                        placeholder={selectedValueGender}
+                        selectedValue={selectedValueGender}
+                        style={{
+                          height: "100%",
+                          width: "100%",
+                          color: "black",
+                        }}
+                        onValueChange={(value, itemIndex) =>
+                          setSelectedValueGender(value)
+                        }
+                      >
+                        <Picker.Item label="Género" value="" />
+                        <Picker.Item label="Masculino" value="Masculino" />
+                        <Picker.Item label="Femenino" value="Femenino" />
+                      </Picker>
+                      {!validationGender ? (
+                        <Text h6 style={{ color: "red" }}>
+                          ingrese un valor para genero
+                        </Text>
+                      ) : null}
+                    </View>
+                  </>
+
+                  <Controller
+                    control={control}
+                    name="password"
+                    defaultValue=""
+                    onFocus={() => {
+                      passwordRef.current.focus();
+                    }}
+                    render={(props) => (
+                      <TextField
+                        placeholder="Contraseña"
+                        autoCapitalize={"none"}
+                        autoCorrect={false}
+                        textContentType={"password"}
+                        secureTextEntry={true}
+                        ref={passwordRef}
+                        returnKeyType="go"
+                        onChangeText={(value) => props.onChange(value)}
+                        error={errors.password?.message}
+                        enableErrors={!!errors.password}
+                      />
+                    )}
+                  />
+                </View>
+
+                <View>
+                  <Button
+                    margin-15
+                    labelStyle={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      padding: 5,
+                    }}
+                    enableShadow
+                    label="Crear mi cuenta"
+                    onPress={handleSubmit(onCreate)}
+                    style={{
+                      backgroundColor: "#E07A5F",
+                      margin: 20,
+                      marginTop: 45,
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                    margin-5
+                    link
+                    label="Iniciar sesión"
+                    onPress={() => navigation.navigate("LoginScreen")}
+                  />
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </View>
+    </>
   );
 };
 

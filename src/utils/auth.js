@@ -88,7 +88,9 @@ function useAuthProvider() {
             createAt: date,
             email: data.email,
             name: data.name,
+            lastname: data.lastname,
             uid: userCredential.user.uid,
+            role: "ROLE_DENUNCIANTE",
           });
         });
       return true;
