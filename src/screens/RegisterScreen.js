@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Button, Text, TextField, View } from "react-native-ui-lib";
+import {
+  Button,
+  Text,
+  TextField,
+  View,
+  Picker,
+  DateTimePicker,
+} from "react-native-ui-lib";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -17,17 +24,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
-import { Picker } from "@react-native-picker/picker";
+import moment from "moment";
 
 const schema = yup.object().shape({
   name: yup.string().required("Ingresa tu nombre"),
   lastname: yup.string().required("Ingresa tu apellido"),
-  age: yup
-    .string()
-    .required("Ingrese una edad")
-    .test("", "La edad debe estar entre 18 a 65 años.", (value) => {
-      return value >= 18 && value <= 65;
-    }),
+  birthdate: yup.string().required("Selecciona una fecha"),
+  gender: yup.string().required("Selecciona un género"),
+  ies: yup.string().required("Selecciona una universidad"),
+  memberType: yup.string().required("Selecciona un rol en la universidad"),
   email: yup
     .string()
     .required("Ingresa tu correo electrónico")
@@ -42,46 +47,30 @@ const RegisterScreen = ({ navigation }) => {
   const { errors, handleSubmit, control } = useForm({
     resolver: yupResolver(schema),
   });
-  let nameRef = React.useRef();
-  let lastnameRef = React.useRef();
-  let emailRef = React.useRef();
-  let ageRef = React.useRef();
-  let passwordRef = React.useRef();
+  let nameRef = useRef();
+  let lastnameRef = useRef();
+  let emailRef = useRef();
+  let ageRef = useRef();
+  let passwordRef = useRef();
   const { register } = useAuth();
   const [loading, setLoading] = useState(false);
   const addToast = useToast();
   const [selectedValueGender, setSelectedValueGender] = useState("");
-  const [validationGender, setValidationGender] = useState(true);
-
-  useEffect(() => {
-    setValidationGender(true);
-  }, []);
-
-  useEffect(() => {
-    if (selectedValueGender !== "") {
-      setValidationGender(true);
-    } else {
-      setValidationGender(false);
-    }
-  }, [selectedValueGender]);
+  const [selectedValueIes, setSelectedValueIes] = useState("");
+  const [selectedValueMemberType, setSelectedValueMemberType] = useState("");
 
   const onCreate = async (data) => {
-    //console.log("Datos de registro:", data);
-    //setLoading(true);
-
-    if (validationGender) {
-      try {
-        //await register(data);
-        console.log("DAtos con create", data);
-        console.log("valorgenero", selectedValueGender);
-      } catch (error) {
-        addToast({
-          position: "top",
-          backgroundColor: "#CC0000",
-          message: translateMessage(error.code),
-        });
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      //console.log("datos con create", data);
+      await register(data);
+    } catch (error) {
+      addToast({
+        position: "top",
+        backgroundColor: "#CC0000",
+        message: translateMessage(error.code),
+      });
+      setLoading(false);
     }
   };
 
@@ -106,7 +95,6 @@ const RegisterScreen = ({ navigation }) => {
                     <Controller
                       control={control}
                       name="name"
-                      rules={{ required: "Ingresa tu nombre" }}
                       defaultValue=""
                       onFocus={() => {
                         nameRef.current.focus();
@@ -129,7 +117,6 @@ const RegisterScreen = ({ navigation }) => {
                     <Controller
                       control={control}
                       name="lastname"
-                      rules={{ required: "Ingresa tu apellido" }}
                       defaultValue=""
                       onFocus={() => {
                         lastnameRef.current.focus();
@@ -153,7 +140,6 @@ const RegisterScreen = ({ navigation }) => {
                   <Controller
                     control={control}
                     name="email"
-                    rules={{ required: "Ingresa tu correo" }}
                     defaultValue=""
                     onFocus={() => {
                       emailRef.current.focus();
@@ -175,57 +161,178 @@ const RegisterScreen = ({ navigation }) => {
                       />
                     )}
                   />
+                  <View row spread>
+                    <Controller
+                      control={control}
+                      name="birthdate"
+                      defaultValue=""
+                      render={(props) => (
+                        <DateTimePicker
+                          style={styles.textFileRegister}
+                          error={errors.birthdate?.message}
+                          enableErrors={!!errors.birthdate}
+                          placeholder={"Fecha nacimiento"}
+                          minimumDate={
+                            new Date(
+                              moment()
+                                .subtract(70, "years")
+                                .format("YYYY-MM-DD")
+                            )
+                          }
+                          maximumDate={
+                            new Date(
+                              moment()
+                                .subtract(18, "years")
+                                .format("YYYY-MM-DD")
+                            )
+                          }
+                          dateFormat={"YYYY-MM-DD"}
+                          onChange={(value) => {
+                            let fe1 = moment(value).format("YYYY-MM-DD");
+                            props.onChange(fe1);
+                          }}
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      name="gender"
+                      control={control}
+                      defaultValue=""
+                      render={(props) => (
+                        <Picker
+                          placeholder="Escoja un género"
+                          useNativePicker
+                          topBarProps={{
+                            title: "Género",
+                            doneLabel: "Aceptar",
+                            cancelLabel: "Cancelar",
+                          }}
+                          value={selectedValueGender}
+                          error={errors.gender?.message}
+                          enableErrors={!!errors.gender}
+                          style={styles.textFileRegister}
+                          onChange={(value) => {
+                            props.onChange(value);
+                            setSelectedValueGender(value);
+                          }}
+                        >
+                          <Picker.Item label="Masculino" value="Masculino" />
+                          <Picker.Item label="Femenino" value="Femenino" />
+                        </Picker>
+                      )}
+                    />
+                  </View>
+
                   <Controller
+                    name="ies"
                     control={control}
-                    name="age"
                     defaultValue=""
-                    onFocus={() => {
-                      ageRef.current.focus();
-                    }}
                     render={(props) => (
-                      <TextField
-                        style={styles.textFileRegister}
-                        placeholder="Edad"
-                        autoCorrect={false}
-                        onChangeText={(value) => props.onChange(value)}
-                        returnKeyType={"next"}
-                        onSubmitEditing={() => passwordRef.current.focus()}
-                        ref={ageRef}
-                        error={errors.age?.message}
-                        enableErrors={!!errors.age}
-                        keyboardType="numeric"
-                      />
+                      <Picker
+                        enableModalBlur={false}
+                        topBarProps={{ title: "Universidades" }}
+                        style={{
+                          marginTop: 15,
+                          height: 45,
+                          paddingHorizontal: 15,
+                          borderColor: "#E8E8E8",
+                          borderWidth: 1,
+                          backgroundColor: "#F6F6F6",
+                          borderRadius: 5,
+                        }}
+                        showSearch
+                        searchPlaceholder={"Busqua tu universidad"}
+                        searchStyle={{
+                          color: "black",
+                          placeholderTextColor: "black",
+                        }}
+                        placeholder="Escoje tu universidad"
+                        value={selectedValueIes}
+                        error={errors.ies?.message}
+                        enableErrors={!!errors.ies}
+                        onChange={(value) => {
+                          props.onChange(value.value);
+                          setSelectedValueIes(value.value);
+                        }}
+                      >
+                        <Picker.Item
+                          label="Escuela Politécnica Nacional (EPN)"
+                          value="EPN"
+                        />
+                        <Picker.Item
+                          label="Universidad Central del Ecuador (UCE)"
+                          value="UCE"
+                        />
+                        <Picker.Item
+                          label="Pontificia Uni. Católica del Ecuador (PUCE)"
+                          value="PUCE"
+                        />
+                        <Picker.Item
+                          label="Escuela Politécnica del Ejército (ESPE)"
+                          value="ESPE"
+                        />
+                        <Picker.Item
+                          label="Escuela Sup. Politécnica del Litoral (ESPOL)"
+                          value="ESPOL"
+                        />
+                        <Picker.Item
+                          label="Universidad Andina Simón Bolivar (UASB)"
+                          value="UASB"
+                        />
+
+                        <Picker.Item
+                          label="Universidad Inetrnacional del Ecuador (UIDE)"
+                          value="UIDE"
+                        />
+                        <Picker.Item
+                          label="Universidad San Francisco de Quito (USFQ)"
+                          value="USFQ"
+                        />
+                        <Picker.Item
+                          label="Universidad Tecnológica Equinoccial (UTE)"
+                          value="UTE"
+                        />
+                        <Picker.Item
+                          label="Universidad de las Américas (UDLA)"
+                          value="UDLA"
+                        />
+                      </Picker>
                     )}
                   />
 
-                  <>
-                    <Text marginT-10 style={{ marginBottom: -10 }}>
-                      Escoja un genero
-                    </Text>
-                    <View style={styles.textFileRegister}>
+                  <Controller
+                    name="memberType"
+                    control={control}
+                    defaultValue=""
+                    render={(props) => (
                       <Picker
-                        placeholder={selectedValueGender}
-                        selectedValue={selectedValueGender}
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          color: "black",
+                        placeholder="Escoje tu rol en la universidad"
+                        useNativePicker
+                        topBarProps={{
+                          title: "Rol en la universidad",
+                          doneLabel: "Aceptar",
+                          cancelLabel: "Cancelar",
                         }}
-                        onValueChange={(value, itemIndex) =>
-                          setSelectedValueGender(value)
-                        }
+                        value={selectedValueMemberType}
+                        error={errors.memberType?.message}
+                        enableErrors={!!errors.memberType}
+                        style={styles.textFileRegister}
+                        onChange={(value) => {
+                          props.onChange(value);
+                          setSelectedValueMemberType(value);
+                        }}
                       >
-                        <Picker.Item label="Género" value="" />
-                        <Picker.Item label="Masculino" value="Masculino" />
-                        <Picker.Item label="Femenino" value="Femenino" />
+                        <Picker.Item label="Estudiante" value="Estudiante" />
+                        <Picker.Item label="Docente" value="Docente" />
+                        <Picker.Item
+                          label="Administrativo"
+                          value="Administrativo"
+                        />
+                        <Picker.Item label="Servicios" value="Servicios" />
                       </Picker>
-                      {!validationGender ? (
-                        <Text h6 style={{ color: "red" }}>
-                          ingrese un valor para genero
-                        </Text>
-                      ) : null}
-                    </View>
-                  </>
+                    )}
+                  />
 
                   <Controller
                     control={control}
@@ -243,7 +350,9 @@ const RegisterScreen = ({ navigation }) => {
                         secureTextEntry={true}
                         ref={passwordRef}
                         returnKeyType="go"
-                        onChangeText={(value) => props.onChange(value)}
+                        onChangeText={(value) => {
+                          props.onChange(value);
+                        }}
                         error={errors.password?.message}
                         enableErrors={!!errors.password}
                       />

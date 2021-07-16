@@ -12,7 +12,7 @@ import {
 import TabBar from "./TabBar";
 import StatisticsScreen from "../screens/StatisticsScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
-import EditUserProfileScreen from "../screens/UserProfileScreen";
+import EditUserProfileScreen from "../screens/EditUserProfileScreen";
 import { useAuth } from "../utils/auth";
 
 const Stack = createStackNavigator();
@@ -51,18 +51,13 @@ const MainStackNavigator = ({ navigation }) => {
       <Stack.Screen
         name="UserProfile"
         component={UserProfileScreen}
-        options={{ headerTitle: "Perfil" }}
+        options={{ headerTitle: "Perfil", headerShown: false }}
       />
       <Stack.Screen
         name="EditUserProfile"
         component={EditUserProfileScreen}
-        options={{ headerTitle: "Actualziar Perfil" }}
-      />
-
-      <Stack.Screen
-        name="Statistics"
-        component={StatisticsScreen}
-        options={{ headerTitle: "Estadísticas" }}
+        //style={{ backgroundColor: "red" }}
+        options={{ headerTitle: "Actualizar Perfil", headerShown: false }}
       />
     </Stack.Navigator>
   );

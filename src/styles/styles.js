@@ -72,6 +72,12 @@ const styles = StyleSheet.create({
     // paddingTop: 50,
   },
 
+  //Estido de editar perfil
+  screenEditProfile: {
+    backgroundColor: "#F4F1DE",
+    height: "100%",
+  },
+
   background2: {
     position: "absolute",
     left: 0,
@@ -87,6 +93,27 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderWidth: 1,
     backgroundColor: "#F6F6F6",
+    borderRadius: 5,
+  },
+
+  //estilo de reportes
+  textFileReport: {
+    height: 45,
+    marginTop: 5,
+    paddingHorizontal: 10,
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
+    backgroundColor: "white",
+    borderRadius: 5,
+  },
+
+  textAreaReport: {
+    height: 90,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
+    backgroundColor: "white",
     borderRadius: 5,
   },
 });
