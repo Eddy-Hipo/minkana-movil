@@ -83,11 +83,15 @@ function useAuthProvider() {
       await auth
         .createUserWithEmailAndPassword(data.email, data.password)
         .then((userCredential) => {
-          const date = moment().format("MMMM Do YYYY, h:mm:ss a");
+          const date = moment().format("YYYY-MM-DD kk:mm:ss");
           db.collection("users").doc(userCredential.user.uid).set({
             createAt: date,
             email: data.email,
             name: data.name,
+            birthdate: data.birthdate,
+            gender: data.gender,
+            ies: data.ies,
+            memberType: data.memberType,
             lastname: data.lastname,
             uid: userCredential.user.uid,
             role: "ROLE_DENUNCIANTE",

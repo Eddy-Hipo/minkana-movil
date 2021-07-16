@@ -1,14 +1,28 @@
-import React from "react";
-import { ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { Text, View, Button } from "react-native-ui-lib";
 import PropTypes from "prop-types";
 import styles from "../styles/styles";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useAuth } from "../utils/auth";
 import { LinearGradient } from "expo-linear-gradient";
+import EditUserProfileScreen from "./EditUserProfileScreen";
 
 const UserProfileScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <>
@@ -30,7 +44,7 @@ const UserProfileScreen = ({ navigation }) => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("Inicio");
+                navigation.navigate("Home");
               }}
               style={{ flex: 0.1 }}
             >
@@ -99,6 +113,14 @@ const UserProfileScreen = ({ navigation }) => {
             />
           </View>
         </ScrollView>
+        <Modal
+          animationType="slide"
+          statusBarTranslucent={true}
+          visible={modalVisible}
+          onRequestClose={handleCloseModal}
+        >
+          <EditUserProfileScreen onClose={handleCloseModal} />
+        </Modal>
       </SafeAreaView>
     </>
   );
