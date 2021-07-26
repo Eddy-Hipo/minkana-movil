@@ -1,28 +1,15 @@
-import React, { useState } from "react";
-import {
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import React from "react";
+import { ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import { Text, View, Button } from "react-native-ui-lib";
 import PropTypes from "prop-types";
 import styles from "../styles/styles";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { useAuth } from "../utils/auth";
+import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import EditUserProfileScreen from "./EditUserProfileScreen";
+import { useAuth } from "../utils/auth";
 
 const UserProfileScreen = ({ navigation }) => {
   const { user } = useAuth();
-  const [modalVisible, setModalVisible] = useState(false);
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <>
@@ -85,14 +72,16 @@ const UserProfileScreen = ({ navigation }) => {
               Edad
             </Text>
             <Text marginB-17 h5>
-              {user.age}
+              {moment().diff(user.birthdate, "years")}
             </Text>
+
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Género
             </Text>
             <Text marginB-17 h5>
               {user.gender}
             </Text>
+
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Institución de Educación Superior
             </Text>
@@ -103,7 +92,7 @@ const UserProfileScreen = ({ navigation }) => {
               Tipo
             </Text>
             <Text marginB-20 h5>
-              {user.member}
+              {user.memberType}
             </Text>
             <Button
               label="Actualizar Perfil"
@@ -113,14 +102,6 @@ const UserProfileScreen = ({ navigation }) => {
             />
           </View>
         </ScrollView>
-        <Modal
-          animationType="slide"
-          statusBarTranslucent={true}
-          visible={modalVisible}
-          onRequestClose={handleCloseModal}
-        >
-          <EditUserProfileScreen onClose={handleCloseModal} />
-        </Modal>
       </SafeAreaView>
     </>
   );

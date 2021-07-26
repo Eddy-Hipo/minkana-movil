@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from "react-native";
 import { useRef, useState } from "react";
 import {
@@ -14,6 +15,7 @@ import {
   View,
   DateTimePicker,
   Picker,
+  Image,
 } from "react-native-ui-lib";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -25,6 +27,9 @@ import translateMessage from "../utils/translateMessage";
 import { useToast } from "../utils/toast";
 import { useAuth } from "../utils/auth";
 import moment from "moment";
+import { numReport } from "../hooks/useReports";
+import { loadImageFromGallery } from "../utils/helpers";
+import { uploadImage } from "../services/reports";
 import { db } from "../utils/firebase";
 
 const schema = yup.object().shape({
@@ -49,21 +54,83 @@ const ReportScreen = ({ navigation }) => {
   const dateOccurredRef = useRef();
   const titleComplaintRef = useRef();
   const complaintRef = useRef();
-  const typeRef = useRef();
+
   const placeRef = useRef();
+
+  //const reportsRef = dataReports.getReportsTotal(user.uid);
+  const [resultImage, setResultImage] = useState(false);
+  const [uriImage, setUriImage] = useState("");
+  const [numReportsRef] = numReport();
+  const [uriUploadImage, setUriUploadImage] = useState("");
 
   const [selectedValueType, setSelectedValueType] = useState("");
 
+  const handleImage = async () => {
+    const result = await loadImageFromGallery([3, 2]);
+    //console.log("resultado imagen", result);
+    if (result.image) {
+      setResultImage(true);
+      setUriImage(result.image);
+    } else {
+      setResultImage(false);
+      setUriImage("");
+    }
+    if (!result.status) {
+      return;
+    }
+    const numReport = numReportsRef + 1;
+    const namePhoto = user.uid + "Report" + numReport;
+    //console.log("nomreb foto a guardar", namePhoto);
+    const resultUploadImage = await uploadImage(
+      result.image,
+      "places",
+      namePhoto
+    );
+    //console.log("url firebase photo", resultUploadImage);
+    if (!resultUploadImage.statusResponse) {
+      Alert.alert(
+        "Ha ocurrido un error al almacenar la evidencia de la denuncia"
+      );
+      setResultImage(false);
+      setUriImage("");
+      setUriUploadImage("");
+      return;
+    }
+    setUriUploadImage(resultUploadImage.url);
+  };
+
   const onCreate = async (data) => {
     try {
-      const dataTotal = {
-        ...data,
-        whistleblower: user.uid,
-        status: "Pendiente",
-        emitionDate: moment().format("YYYY-MM-DD kk:mm:ss"),
-      };
+      let dataTotal = {};
+      if (!resultImage) {
+        dataTotal = {
+          ...data,
+          whistleblower: user.uid,
+          status: "Pendiente",
+          emitionDate: moment().format("YYYY-MM-DD kk:mm:ss"),
+          photoURL:
+            "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/places%2Fimagendenuncia.jpg?alt=media&token=02c8315f-8433-4167-b26f-58a3c59b5d0e",
+        };
+      } else {
+        dataTotal = {
+          ...data,
+          whistleblower: user.uid,
+          status: "Pendiente",
+          emitionDate: moment().format("YYYY-MM-DD kk:mm:ss"),
+          photoURL: uriUploadImage,
+        };
+      }
+
       //console.log("datos del reporte total2", dataTotal);
+      //const dataReportsScreen = await dataReports();
+
+      //console.log("datos total report en reportScreen num ", numReportsRef);
+
       await db.collection("reports").add({ ...dataTotal });
+
+      setResultImage(false);
+      setUriImage("");
+      setUriUploadImage("");
       navigation.navigate("Inicio");
       addToast({
         position: "top",
@@ -114,7 +181,7 @@ const ReportScreen = ({ navigation }) => {
                       ref={titleComplaintRef}
                       style={styles.textFileReport}
                       placeholder="Título de la denuncia"
-                      autoCapitalize="words"
+                      autoCapitalize="sentences"
                       autoCorrect={false}
                       onChangeText={(value) => props.onChange(value)}
                       returnKeyType={"next"}
@@ -144,12 +211,11 @@ const ReportScreen = ({ navigation }) => {
                       ref={complaintRef}
                       style={styles.textAreaReport}
                       //expandable
-                      autoCapitalize="none"
+                      autoCapitalize="sentences"
                       multiline
                       autoCorrect={false}
                       onChangeText={(value) => props.onChange(value)}
                       returnKeyType={"next"}
-                      onSubmitEditing={() => typeRef.current.focus()}
                       error={errors.description?.message}
                       enableErrors={!!errors.description}
                     />
@@ -163,12 +229,8 @@ const ReportScreen = ({ navigation }) => {
                   name="type"
                   control={control}
                   defaultValue=""
-                  onFocus={() => {
-                    typeRef.current.focus();
-                  }}
                   render={(props) => (
                     <Picker
-                      ref={typeRef}
                       placeholder="Escoja el tipo de acoso"
                       useNativePicker
                       value={selectedValueType}
@@ -232,7 +294,7 @@ const ReportScreen = ({ navigation }) => {
                       placeholder={"Seleccione la fecha del suseso"}
                       minimumDate={
                         new Date(
-                          moment().subtract(1, "months").format("YYYY-MM-DD")
+                          moment().subtract(15, "days").format("YYYY-MM-DD")
                         )
                       }
                       maximumDate={
@@ -247,6 +309,36 @@ const ReportScreen = ({ navigation }) => {
                   )}
                 />
 
+                <Text h6 style={{ marginTop: 15, marginBottom: 10 }}>
+                  Adjunta una prueba (Opcional)
+                </Text>
+                <View marginH-15>
+                  {resultImage ? (
+                    <Image
+                      borderRadius={25}
+                      source={{ uri: uriImage }}
+                      style={{
+                        height: 250,
+                        width: "100%",
+                      }}
+                      cover={false}
+                    />
+                  ) : null}
+                </View>
+                <Button
+                  label="Selecciona una imagen"
+                  labelStyle={{ fontSize: 15, padding: 3 }}
+                  enableShadow
+                  onPress={handleImage}
+                  style={{
+                    backgroundColor: "#3D405B",
+                    marginLeft: 70,
+                    marginRight: 70,
+                    marginTop: 20,
+                    marginBottom: 30,
+                  }}
+                />
+
                 <Button
                   label="Crear reporte"
                   labelStyle={{ fontWeight: "bold", fontSize: 20, padding: 5 }}
@@ -254,8 +346,10 @@ const ReportScreen = ({ navigation }) => {
                   onPress={handleSubmit(onCreate)}
                   style={{
                     backgroundColor: "#E07A5F",
-                    margin: 20,
-                    marginTop: 30,
+                    marginLeft: 50,
+                    marginRight: 50,
+                    marginTop: 20,
+                    marginBottom: 20,
                   }}
                 />
               </View>

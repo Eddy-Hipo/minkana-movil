@@ -2,6 +2,7 @@ import React from "react";
 import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
   Platform,
 } from "react-native";
@@ -18,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "../components/Loading";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
+import { Octicons } from "@expo/vector-icons";
 
 const schema = yup.object().shape({
   email: yup
@@ -36,6 +38,7 @@ const LoginScreen = ({ navigation }) => {
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
+  const [viewPassword, setViewPassword] = useState(true);
 
   const onLogin = async (data) => {
     console.log(data);
@@ -50,6 +53,14 @@ const LoginScreen = ({ navigation }) => {
         message: translateMessage(error.code),
       });
       setLoading(false);
+    }
+  };
+
+  const handleViewPassword = () => {
+    if (viewPassword) {
+      setViewPassword(false);
+    } else {
+      setViewPassword(true);
     }
   };
 
@@ -95,24 +106,38 @@ const LoginScreen = ({ navigation }) => {
                   )}
                 />
 
-                <Controller
-                  control={control}
-                  name="password"
-                  defaultValue=""
-                  render={({ onChange, value }) => (
-                    <TextField
-                      secureTextEntry={true}
-                      placeholder="Clave"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      error={errors.password?.message}
-                      ref={passwordRef}
-                      enableErrors={!!errors?.password}
-                    />
-                  )}
-                />
+                <View row spread>
+                  <Controller
+                    control={control}
+                    name="password"
+                    defaultValue=""
+                    render={({ onChange, value }) => (
+                      <TextField
+                        style={styles.textFieldPassword}
+                        secureTextEntry={viewPassword}
+                        placeholder="Clave"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        onChangeText={(value) => onChange(value)}
+                        value={value}
+                        error={errors.password?.message}
+                        ref={passwordRef}
+                        enableErrors={!!errors?.password}
+                      />
+                    )}
+                  />
+
+                  <TouchableOpacity
+                    onPress={handleViewPassword}
+                    style={styles.viewPassword}
+                  >
+                    {viewPassword ? (
+                      <Octicons name="eye" size={30} color="black" />
+                    ) : (
+                      <Octicons name="eye-closed" size={30} color="black" />
+                    )}
+                  </TouchableOpacity>
+                </View>
 
                 <Button
                   label="Iniciar sesión"

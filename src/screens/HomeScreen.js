@@ -1,20 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, Modal } from "react-native";
-import { Button, Text, View } from "react-native-ui-lib";
+import { Button, Text, View, Card, Image } from "react-native-ui-lib";
 import { useAuth } from "../utils/auth";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
+//import { dataReports } from "../hooks/useReports";
+import { dataTotalReports } from "../services/reports";
+import { db } from "../utils/firebase";
+import ReportInformation from "../components/ReportInformation";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
+  const [verification, setVerification] = useState(false);
+  const [totalReports, setTotalReports] = useState({});
+  const [modalVisibleReport, setModalVisibleReport] = useState(false);
+  const [reportDataModal, setReportDataModal] = useState({});
+
+  //const [dataReportsRef] = dataReports();
+  //console.log("Datos de los reportes: ", dataReportsRef);
+  //console.log("comporbacion de s ay datos", dataReportsRef !== 0);
 
   useEffect(() => {
-    if (user.role !== "ROLE_DENUNCIANTE") {
+    if (user.role !== "ROLE_WHISTLEBLOWER") {
       handleOpenModal();
+    } else {
+      db.collection("reports")
+        .where("whistleblower", "==", user.uid)
+        .orderBy("emitionDate", "desc")
+        .onSnapshot((querySnapshot) => {
+          const planArray = [];
+          querySnapshot.docs.forEach((item) => {
+            planArray.push({ id: item.id, ...item.data() });
+          });
+          setTotalReports(planArray);
+          setVerification(true);
+        });
     }
   }, []);
+
+  const handleOpenModalReport = (data) => {
+    setModalVisibleReport(true);
+    setReportDataModal(data);
+  };
+
+  const handleCloseModalReport = () => {
+    setModalVisibleReport(false);
+    setReportDataModal({});
+  };
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -34,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Button
-          label="Generar un reporte"
+          label="Generar un reporte "
           onPress={() => {
             navigation.navigate("Reportes");
           }}
@@ -46,7 +80,67 @@ const HomeScreen = ({ navigation }) => {
             navigation.navigate("Estadísticas");
           }}
         />
+
+        {verification ? (
+          totalReports.map((item) => {
+            return (
+              <Card
+                key={item.id}
+                height={280}
+                borderRadius={25}
+                margin-15
+                style={{ backgroundColor: "#E07A5F" }}
+                onPress={() => handleOpenModalReport(item)}
+              >
+                <Image
+                  borderRadius={25}
+                  source={{ uri: item.photoURL }}
+                  style={{
+                    height: 200,
+                    width: "100%",
+                  }}
+                  cover={false}
+                />
+                <Card.Section
+                  padding-10
+                  flex
+                  content={[
+                    {
+                      text: `${item.title}  \n ${item.incidentDate}`,
+                      text70: true,
+                      grey10: true,
+                    },
+                  ]}
+                  contentStyle={{
+                    alignItems: "center",
+                    margin: 0,
+                    padding: 0,
+                  }}
+                />
+              </Card>
+            );
+          })
+        ) : (
+          <View />
+        )}
       </ScrollView>
+
+      <Modal
+        animationType="slide"
+        transparent={false}
+        //fullScreen
+        statusBarTranslucent={false}
+        visible={modalVisibleReport}
+        onRequestClose={() => {
+          handleCloseModalReport();
+        }}
+      >
+        <ReportInformation
+          Report={reportDataModal}
+          onCancel={handleCloseModalReport}
+        />
+      </Modal>
+
       <Modal
         animationType="slide"
         statusBarTranslucent={true}

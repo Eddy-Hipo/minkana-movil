@@ -3,6 +3,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import {
@@ -25,6 +26,7 @@ import Loading from "../components/Loading";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
+import { Octicons } from "@expo/vector-icons";
 
 const schema = yup.object().shape({
   name: yup.string().required("Ingresa tu nombre"),
@@ -59,6 +61,8 @@ const RegisterScreen = ({ navigation }) => {
   const [selectedValueIes, setSelectedValueIes] = useState("");
   const [selectedValueMemberType, setSelectedValueMemberType] = useState("");
 
+  const [viewPassword, setViewPassword] = useState(true);
+
   const onCreate = async (data) => {
     setLoading(true);
     try {
@@ -71,6 +75,14 @@ const RegisterScreen = ({ navigation }) => {
         message: translateMessage(error.code),
       });
       setLoading(false);
+    }
+  };
+
+  const handleViewPassword = () => {
+    if (viewPassword) {
+      setViewPassword(false);
+    } else {
+      setViewPassword(true);
     }
   };
 
@@ -258,44 +270,44 @@ const RegisterScreen = ({ navigation }) => {
                       >
                         <Picker.Item
                           label="Escuela Politécnica Nacional (EPN)"
-                          value="EPN"
+                          value="Escuela Politécnica Nacional"
                         />
                         <Picker.Item
                           label="Universidad Central del Ecuador (UCE)"
-                          value="UCE"
+                          value="Universidad Central del Ecuador"
                         />
                         <Picker.Item
                           label="Pontificia Uni. Católica del Ecuador (PUCE)"
-                          value="PUCE"
+                          value="Pontificia Uni. Católica del Ecuador"
                         />
                         <Picker.Item
                           label="Escuela Politécnica del Ejército (ESPE)"
-                          value="ESPE"
+                          value="Escuela Politécnica del Ejército"
                         />
                         <Picker.Item
                           label="Escuela Sup. Politécnica del Litoral (ESPOL)"
-                          value="ESPOL"
+                          value="Escuela Sup. Politécnica del Litoral"
                         />
                         <Picker.Item
-                          label="Universidad Andina Simón Bolivar (UASB)"
-                          value="UASB"
+                          label="Universidad Andina Simón Bolívar (UASB)"
+                          value="Universidad Andina Simón Bolívar"
                         />
 
                         <Picker.Item
-                          label="Universidad Inetrnacional del Ecuador (UIDE)"
-                          value="UIDE"
+                          label="Universidad Internacional del Ecuador (UIDE)"
+                          value="Universidad Internacional del Ecuador"
                         />
                         <Picker.Item
                           label="Universidad San Francisco de Quito (USFQ)"
-                          value="USFQ"
+                          value="Universidad San Francisco de Quito"
                         />
                         <Picker.Item
                           label="Universidad Tecnológica Equinoccial (UTE)"
-                          value="UTE"
+                          value="Universidad Tecnológica Equinoccial"
                         />
                         <Picker.Item
                           label="Universidad de las Américas (UDLA)"
-                          value="UDLA"
+                          value="Universidad de las Américas"
                         />
                       </Picker>
                     )}
@@ -334,30 +346,43 @@ const RegisterScreen = ({ navigation }) => {
                     )}
                   />
 
-                  <Controller
-                    control={control}
-                    name="password"
-                    defaultValue=""
-                    onFocus={() => {
-                      passwordRef.current.focus();
-                    }}
-                    render={(props) => (
-                      <TextField
-                        placeholder="Contraseña"
-                        autoCapitalize={"none"}
-                        autoCorrect={false}
-                        textContentType={"password"}
-                        secureTextEntry={true}
-                        ref={passwordRef}
-                        returnKeyType="go"
-                        onChangeText={(value) => {
-                          props.onChange(value);
-                        }}
-                        error={errors.password?.message}
-                        enableErrors={!!errors.password}
-                      />
-                    )}
-                  />
+                  <View row spread>
+                    <Controller
+                      control={control}
+                      name="password"
+                      defaultValue=""
+                      onFocus={() => {
+                        passwordRef.current.focus();
+                      }}
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFieldPassword}
+                          placeholder="Contraseña"
+                          autoCapitalize={"none"}
+                          autoCorrect={false}
+                          textContentType={"password"}
+                          secureTextEntry={viewPassword}
+                          ref={passwordRef}
+                          returnKeyType="go"
+                          onChangeText={(value) => {
+                            props.onChange(value);
+                          }}
+                          error={errors.password?.message}
+                          enableErrors={!!errors.password}
+                        />
+                      )}
+                    />
+                    <TouchableOpacity
+                      onPress={handleViewPassword}
+                      style={styles.viewPassword}
+                    >
+                      {viewPassword ? (
+                        <Octicons name="eye" size={30} color="black" />
+                      ) : (
+                        <Octicons name="eye-closed" size={30} color="black" />
+                      )}
+                    </TouchableOpacity>
+                  </View>
                 </View>
 
                 <View>

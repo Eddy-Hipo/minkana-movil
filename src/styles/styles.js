@@ -72,6 +72,30 @@ const styles = StyleSheet.create({
     // paddingTop: 50,
   },
 
+  //Estilo de campo contraseña
+  textFieldPassword: {
+    width: "89%",
+    marginTop: 15,
+    height: 45,
+    paddingHorizontal: 15,
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 5,
+  },
+
+  viewPassword: {
+    width: "11%",
+    marginTop: 15,
+    paddingLeft: 5,
+    paddingTop: 7,
+    height: 45,
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 5,
+  },
+
   //Estido de editar perfil
   screenEditProfile: {
     backgroundColor: "#F4F1DE",

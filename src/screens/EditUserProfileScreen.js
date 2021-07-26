@@ -36,21 +36,18 @@ const EditUserProfileScreen = ({ navigation, onClose }) => {
   const { user } = useAuth();
 
   const onUpdate = async (data) => {
-    //console.log("Datos de registro:", data);
-    //setLoading(true);
-    console.log("ingreso al onUpdate");
     try {
-      //await register(data);
       await db.collection("users").doc(user.uid).update({
         name: data.name,
         lastname: data.lastname,
       });
+      navigation.navigate("UserProfile");
       addToast({
         position: "top",
         backgroundColor: "green",
         message: "Datos actualizados correctamente",
       });
-      console.log("datos useredit update", data);
+      //console.log("datos useredit update", data);
     } catch (error) {
       addToast({
         position: "top",
@@ -145,19 +142,30 @@ const EditUserProfileScreen = ({ navigation, onClose }) => {
                 />
                 <Button
                   label="Actualizar"
-                  labelStyle={{ fontWeight: "bold", fontSize: 17, padding: 3 }}
+                  labelStyle={{
+                    fontWeight: "bold",
+                    fontSize: 18,
+                    padding: 3,
+                  }}
                   enableShadow
                   onPress={handleSubmit(onUpdate)}
                   style={{
                     backgroundColor: "#E07A5F",
-                    margin: 20,
-                    marginTop: 45,
+                    marginLeft: 70,
+                    marginRight: 70,
+                    marginTop: 40,
                   }}
                 />
                 <Button
                   label="Cancelar"
                   onPress={() => {
                     navigation.navigate("UserProfile");
+                  }}
+                  style={{
+                    backgroundColor: "#3D405B",
+                    marginLeft: 70,
+                    marginRight: 70,
+                    marginTop: 30,
                   }}
                 />
               </View>

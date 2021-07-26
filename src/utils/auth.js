@@ -94,7 +94,7 @@ function useAuthProvider() {
             memberType: data.memberType,
             lastname: data.lastname,
             uid: userCredential.user.uid,
-            role: "ROLE_DENUNCIANTE",
+            role: "ROLE_WHISTLEBLOWER",
           });
         });
       return true;
@@ -149,13 +149,14 @@ function useAuthProvider() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         console.log("SESIÓN ACTIVA", userAuthData);
-        const userDoc = await db
-          .collection("users")
+        db.collection("users")
           .doc(userAuthData.uid)
-          .get();
-        const userData = userDoc.data();
-        console.log("userDAta", userData);
-        handleUser(userData);
+          .onSnapshot((doc) => {
+            //setDat(doc.data());
+            const dat1 = doc.data();
+            console.log("userDAta", dat1);
+            handleUser(dat1);
+          });
       } else {
         // User is signed out
         console.log("SIN SESIÓN", userAuthData);
