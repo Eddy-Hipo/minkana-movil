@@ -6,6 +6,7 @@ import {
   Keyboard,
   Platform,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import { useRef, useState } from "react";
 import {
@@ -31,6 +32,7 @@ import { numReport } from "../hooks/useReports";
 import { loadImageFromGallery } from "../utils/helpers";
 import { uploadImage } from "../services/reports";
 import { db } from "../utils/firebase";
+import { Ionicons } from "@expo/vector-icons";
 
 const schema = yup.object().shape({
   title: yup.string().required("Ingrese un título a su denuncia."),
@@ -54,7 +56,6 @@ const ReportScreen = ({ navigation }) => {
   const dateOccurredRef = useRef();
   const titleComplaintRef = useRef();
   const complaintRef = useRef();
-
   const placeRef = useRef();
 
   //const reportsRef = dataReports.getReportsTotal(user.uid);
@@ -62,7 +63,6 @@ const ReportScreen = ({ navigation }) => {
   const [uriImage, setUriImage] = useState("");
   const [numReportsRef] = numReport();
   const [uriUploadImage, setUriUploadImage] = useState("");
-
   const [selectedValueType, setSelectedValueType] = useState("");
 
   const handleImage = async () => {
@@ -131,7 +131,7 @@ const ReportScreen = ({ navigation }) => {
       setResultImage(false);
       setUriImage("");
       setUriUploadImage("");
-      navigation.navigate("Inicio");
+      navigation.navigate("Home");
       addToast({
         position: "top",
         backgroundColor: "green",
@@ -157,9 +157,9 @@ const ReportScreen = ({ navigation }) => {
         behavior={Platform.OS === "ios" ? "position" : "height"}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
+          <View style={{ marginBottom: 5, marginTop: 2 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View margin-10>
+              <View marginT-10 marginL-10 marginR-10>
                 <Text
                   h1
                   style={{
@@ -247,6 +247,7 @@ const ReportScreen = ({ navigation }) => {
                         setSelectedValueType(value);
                       }}
                     >
+                      <Picker.Item label="" value="" />
                       <Picker.Item label="Fisico" value="Físico" />
                       <Picker.Item label="Psicológico" value="Psicológico" />
                       <Picker.Item label="Verbal" value="Verbal" />
@@ -335,13 +336,17 @@ const ReportScreen = ({ navigation }) => {
                     marginLeft: 70,
                     marginRight: 70,
                     marginTop: 20,
-                    marginBottom: 30,
+                    marginBottom: 20,
                   }}
                 />
 
                 <Button
                   label="Crear reporte"
-                  labelStyle={{ fontWeight: "bold", fontSize: 20, padding: 5 }}
+                  labelStyle={{
+                    fontWeight: "bold",
+                    fontSize: 20,
+                    padding: 5,
+                  }}
                   enableShadow
                   onPress={handleSubmit(onCreate)}
                   style={{

@@ -95,6 +95,7 @@ function useAuthProvider() {
             lastname: data.lastname,
             uid: userCredential.user.uid,
             role: "ROLE_WHISTLEBLOWER",
+            account: "Habilitada",
           });
         });
       return true;

@@ -1,54 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, Modal } from "react-native";
-import { Button, Text, View, Card, Image } from "react-native-ui-lib";
+import { ScrollView, Modal, TouchableOpacity } from "react-native";
+import { Button, Text, View } from "react-native-ui-lib";
 import { useAuth } from "../utils/auth";
-import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
-//import { dataReports } from "../hooks/useReports";
-import { dataTotalReports } from "../services/reports";
-import { db } from "../utils/firebase";
-import ReportInformation from "../components/ReportInformation";
+import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
-  const [verification, setVerification] = useState(false);
-  const [totalReports, setTotalReports] = useState({});
-  const [modalVisibleReport, setModalVisibleReport] = useState(false);
-  const [reportDataModal, setReportDataModal] = useState({});
-
-  //const [dataReportsRef] = dataReports();
-  //console.log("Datos de los reportes: ", dataReportsRef);
-  //console.log("comporbacion de s ay datos", dataReportsRef !== 0);
 
   useEffect(() => {
     if (user.role !== "ROLE_WHISTLEBLOWER") {
       handleOpenModal();
-    } else {
-      db.collection("reports")
-        .where("whistleblower", "==", user.uid)
-        .orderBy("emitionDate", "desc")
-        .onSnapshot((querySnapshot) => {
-          const planArray = [];
-          querySnapshot.docs.forEach((item) => {
-            planArray.push({ id: item.id, ...item.data() });
-          });
-          setTotalReports(planArray);
-          setVerification(true);
-        });
     }
   }, []);
-
-  const handleOpenModalReport = (data) => {
-    setModalVisibleReport(true);
-    setReportDataModal(data);
-  };
-
-  const handleCloseModalReport = () => {
-    setModalVisibleReport(false);
-    setReportDataModal({});
-  };
 
   const handleOpenModal = () => {
     setModalVisible(true);
@@ -66,80 +32,59 @@ const HomeScreen = ({ navigation }) => {
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Button
-          label="Generar un reporte "
-          onPress={() => {
-            navigation.navigate("Reportes");
-          }}
-        />
-
-        <Button
-          label="Ver estadísticas"
-          onPress={() => {
-            navigation.navigate("Estadísticas");
-          }}
-        />
-
-        {verification ? (
-          totalReports.map((item) => {
-            return (
-              <Card
-                key={item.id}
-                height={280}
-                borderRadius={25}
-                margin-15
-                style={{ backgroundColor: "#E07A5F" }}
-                onPress={() => handleOpenModalReport(item)}
-              >
-                <Image
-                  borderRadius={25}
-                  source={{ uri: item.photoURL }}
-                  style={{
-                    height: 200,
-                    width: "100%",
+      <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View marginT-30>
+            <View marginR-25 marginL-25 spread row>
+              <View center style={styles.cardHome}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Reportes");
                   }}
-                  cover={false}
-                />
-                <Card.Section
-                  padding-10
-                  flex
-                  content={[
-                    {
-                      text: `${item.title}  \n ${item.incidentDate}`,
-                      text70: true,
-                      grey10: true,
-                    },
-                  ]}
-                  contentStyle={{
-                    alignItems: "center",
-                    margin: 0,
-                    padding: 0,
-                  }}
-                />
-              </Card>
-            );
-          })
-        ) : (
-          <View />
-        )}
-      </ScrollView>
+                >
+                  <View center style={{ width: "100%", height: "100%" }}>
+                    <AntDesign name="solution1" size={100} color="white" />
+                    <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
+                      Crear Reporte
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
 
-      <Modal
-        animationType="slide"
-        transparent={false}
-        //fullScreen
-        statusBarTranslucent={false}
-        visible={modalVisibleReport}
-        onRequestClose={() => {
-          handleCloseModalReport();
-        }}
-      >
-        <ReportInformation
-          Report={reportDataModal}
-          onCancel={handleCloseModalReport}
-        />
-      </Modal>
+              <View center style={styles.cardHome}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Notificaciones");
+                  }}
+                >
+                  <View center style={{ width: "100%", height: "100%" }}>
+                    <Ionicons name="notifications" size={100} color="white" />
+                    <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
+                      Notificaciones
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View center marginT-30>
+              <View center style={styles.cardHome}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Estadisticas");
+                  }}
+                >
+                  <View center style={{ width: "100%", height: "100%" }}>
+                    <Entypo name="bar-graph" size={100} color="white" />
+                    <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
+                      Estadísticas
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
 
       <Modal
         animationType="slide"
