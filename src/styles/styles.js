@@ -20,6 +20,15 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: "#000000",
   },
+
+  //Estilos de tarjetas de inicio
+  cardHome: {
+    backgroundColor: "#3D405B",
+    width: "46%",
+    height: 200,
+  },
+
+  //
   homeHeaderText: {
     fontWeight: "400",
     fontSize: 30,

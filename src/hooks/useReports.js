@@ -26,15 +26,20 @@ export const dataReports = () => {
 export const numReport = () => {
   const { user } = useAuth();
   const [numTotal, setNumTotal] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(true);
 
   useEffect(() => {
-    dataTotalReports(user.uid).onSnapshot((querySnapshot) => {
-      let aux = 0;
-      querySnapshot.docs.forEach((item) => {
-        aux++;
+    setIsSubscribed(true);
+    if (isSubscribed) {
+      dataTotalReports(user.uid).onSnapshot((querySnapshot) => {
+        let aux = 0;
+        querySnapshot.docs.forEach((item) => {
+          aux++;
+        });
+        setNumTotal(aux);
       });
-      setNumTotal(aux);
-    });
+    }
+    return () => setIsSubscribed(false);
   }, []);
 
   return [numTotal];

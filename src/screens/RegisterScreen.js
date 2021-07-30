@@ -231,6 +231,7 @@ const RegisterScreen = ({ navigation }) => {
                         >
                           <Picker.Item label="Masculino" value="Masculino" />
                           <Picker.Item label="Femenino" value="Femenino" />
+                          <Picker.Item label="Otro" value="Otro" />
                         </Picker>
                       )}
                     />
@@ -254,7 +255,7 @@ const RegisterScreen = ({ navigation }) => {
                           borderRadius: 5,
                         }}
                         showSearch
-                        searchPlaceholder={"Busqua tu universidad"}
+                        searchPlaceholder={"Busca tu universidad"}
                         searchStyle={{
                           color: "black",
                           placeholderTextColor: "black",

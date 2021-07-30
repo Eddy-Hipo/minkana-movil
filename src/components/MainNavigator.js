@@ -9,10 +9,11 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import TabBar from "./TabBar";
 import StatisticsScreen from "../screens/StatisticsScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
 import EditUserProfileScreen from "../screens/EditUserProfileScreen";
+import ReportScreen from "../screens/ReportScreen";
+import NotificationScreen from "../screens/NotificationsScreen";
 import { useAuth } from "../utils/auth";
 
 const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ const MainStackNavigator = ({ navigation }) => {
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
+        component={HomeScreen}
         options={({ navigation }) => ({
           headerTitleStyle: {
             display: "none",
@@ -41,13 +43,58 @@ const MainStackNavigator = ({ navigation }) => {
             />
           ),
         })}
-      >
-        {(props) => (
-          <View main flex>
-            <TabBar {...props} />
-          </View>
-        )}
-      </Stack.Screen>
+      />
+      <Stack.Screen
+        name="Reportes"
+        component={ReportScreen}
+        options={{
+          headerTitle: "Denuncias",
+          headerStyle: {
+            height: 100,
+            backgroundColor: "#3D405B",
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 25,
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="Notificaciones"
+        component={NotificationScreen}
+        options={{
+          headerTitle: "Notificaciones",
+          headerStyle: {
+            backgroundColor: "#3D405B",
+            height: 100,
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 25,
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="Estadisticas"
+        component={StatisticsScreen}
+        options={{
+          headerTitle: "Estadisticas",
+          headerStyle: {
+            backgroundColor: "#3D405B",
+            height: 100,
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 25,
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
       <Stack.Screen
         name="UserProfile"
         component={UserProfileScreen}
