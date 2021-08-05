@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,7 +12,7 @@ import { View, Text, Button, Image } from "react-native-ui-lib";
 
 import PropTypes from "prop-types";
 
-const ReportInformation = ({ Report, onCancel, navigation }) => {
+const ReportInformation = ({ Report, onCancel, AttendedBy, navigation }) => {
   return (
     <>
       <KeyboardAvoidingView
@@ -38,38 +38,18 @@ const ReportInformation = ({ Report, onCancel, navigation }) => {
                 <Ionicons name="arrow-back-outline" size={35} color="white" />
               </TouchableOpacity>
               <Text white center h2>
-                Información del reporte
+                Información
               </Text>
               <Text />
             </View>
             <View margin-15>
-              <Text h1>{Report.title}</Text>
-              <View spred row>
-                <View style={{ width: "38%" }}>
-                  <Text h4 style={{ fontWeight: "bold", marginBottom: 5 }}>
-                    Estado
-                  </Text>
-                  <Text h6 style={{ marginBottom: 20 }}>
-                    {Report.status}
-                  </Text>
-                </View>
-                <View style={{ width: "58%" }}>
-                  <Text h4 style={{ fontWeight: "bold", marginBottom: 5 }}>
-                    Fecha del incidente
-                  </Text>
-                  <Text h6 style={{ marginBottom: 20 }}>
-                    {Report.incidentDate}
-                  </Text>
-                </View>
-              </View>
-              <Text h4 style={{ fontWeight: "bold", marginBottom: 5 }}>
-                Descripción
-              </Text>
-              <Text h6 style={{ marginBottom: 20 }}>
-                {Report.description}
-              </Text>
-              <Text h4 style={{ fontWeight: "bold", marginBottom: 10 }}>
-                Prueba
+              <Text
+                h2
+                marginT-5
+                marginB-20
+                style={{ textAlign: "center", fontWeight: "bold" }}
+              >
+                {Report.title}
               </Text>
               <Image
                 borderRadius={25}
@@ -80,6 +60,106 @@ const ReportInformation = ({ Report, onCancel, navigation }) => {
                 }}
                 cover={false}
               />
+              <View marginT-25 spred row>
+                <View style={{ width: "40%" }}>
+                  <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                    Estado
+                  </Text>
+                  <Text h7 style={{ marginBottom: 20 }}>
+                    {Report.status}
+                  </Text>
+                </View>
+                <View style={{ width: "60%" }}>
+                  <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                    Fecha del incidente
+                  </Text>
+                  <Text h7 style={{ marginBottom: 20 }}>
+                    {Report.incidentDate}
+                  </Text>
+                </View>
+              </View>
+              {AttendedBy.data ? (
+                <View spred row>
+                  <View style={{ width: "40%" }}>
+                    <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                      Atendido por
+                    </Text>
+                    <Text h7 style={{ marginBottom: 20 }}>
+                      {AttendedBy.name} {AttendedBy.lastname}
+                    </Text>
+                  </View>
+                  <View style={{ width: "60%" }}>
+                    <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                      Fecha de atención
+                    </Text>
+                    <Text h7 style={{ marginBottom: 20 }}>
+                      {Report.resolutionDate}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
+              <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                Lugar específico del suceso
+              </Text>
+              <Text
+                h7
+                style={{
+                  marginBottom: 20,
+                  lineHeight: 24,
+                  textAlign: "justify",
+                }}
+              >
+                {Report.incidentLocation}
+              </Text>
+              <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                Descripción
+              </Text>
+              <Text
+                h7
+                style={{
+                  marginBottom: 20,
+                  lineHeight: 24,
+                  textAlign: "justify",
+                }}
+              >
+                {Report.description}
+              </Text>
+              {Report.veracity !== undefined ? (
+                <View>
+                  {Report.veracity ? (
+                    <Text h5 style={{ fontWeight: "bold", marginBottom: 20 }}>
+                      Denuncia Aceptada
+                    </Text>
+                  ) : (
+                    <View>
+                      <Text h5 style={{ fontWeight: "bold", marginBottom: 20 }}>
+                        Denuncia Rechazada
+                      </Text>
+
+                      {Report.rejectionReason !== undefined ? (
+                        <View>
+                          <Text
+                            h5
+                            style={{ fontWeight: "bold", marginBottom: 5 }}
+                          >
+                            Razón
+                          </Text>
+                          <Text
+                            h7
+                            style={{
+                              marginBottom: 20,
+                              lineHeight: 24,
+                              textAlign: "justify",
+                            }}
+                          >
+                            {Report.rejectionReason}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  )}
+                </View>
+              ) : null}
             </View>
           </ScrollView>
         </View>

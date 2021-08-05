@@ -16,9 +16,11 @@ import styles from "../styles/styles";
 import { db } from "../utils/firebase";
 import ReportInformation from "../components/ReportInformation";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Loading from "../components/Loading";
 
 const NotificationScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [verification, setVerification] = useState(false);
   const [totalReports, setTotalReports] = useState({});
   const [searchReports, setSearchReports] = useState({});
@@ -27,12 +29,14 @@ const NotificationScreen = ({ navigation }) => {
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [statusReport, setStatusReport] = useState("Pendiente");
   const [searchWord, setSearchWord] = useState("");
+  const [dataAttendedBy, setDataAttendedBy] = useState({ data: false });
 
   //const [dataReportsRef] = dataReports();
   //console.log("Datos de los reportes: ", dataReportsRef);
   //console.log("comporbacion de s ay datos", dataReportsRef !== 0);
 
   useEffect(() => {
+    setLoading(true);
     setIsSubscribed(true);
     if (isSubscribed) {
       db.collection("reports")
@@ -49,10 +53,12 @@ const NotificationScreen = ({ navigation }) => {
           setVerification(true);
         });
     }
+    setLoading(false);
     return () => setIsSubscribed(false);
   }, [statusReport]);
 
   useEffect(() => {
+    setLoading(true);
     setIsSubscribed(true);
     if (isSubscribed) {
       //console.log("valor de radioButton", statusReport);
@@ -70,6 +76,7 @@ const NotificationScreen = ({ navigation }) => {
           setVerification(true);
         });
     }
+    setLoading(false);
     return () => setIsSubscribed(false);
   }, [statusReport]);
 
@@ -86,7 +93,30 @@ const NotificationScreen = ({ navigation }) => {
     }
   }, [searchWord]);
 
-  const handleOpenModalReport = (data) => {
+  const handleOpenModalReport = async (data) => {
+    if (data.attendedBy !== undefined) {
+      await db
+        .collection("users")
+        .doc(data.attendedBy)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setDataAttendedBy({
+              name: doc.data().firstname,
+              lastname: doc.data().lastname,
+              data: true,
+            });
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
+    } else {
+      setDataAttendedBy({ data: false });
+    }
+    //console.log("datos de admin: ", dataAttendedBy);
     setModalVisibleReport(true);
     setReportDataModal(data);
   };
@@ -103,6 +133,7 @@ const NotificationScreen = ({ navigation }) => {
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
+      {loading && <Loading />}
       <View marginH-15 marginB-10>
         <TextField
           search
@@ -123,14 +154,14 @@ const NotificationScreen = ({ navigation }) => {
             </Text>
           </View>
           <View row>
-            <View marginR-15>
-              <RadioButton value="Pendiente" label="Pendiente" />
+            <View marginR-14>
+              <RadioButton value="Pendiente" label="Pendientes" />
             </View>
-            <View marginR-15>
-              <RadioButton value="Atendido" label="Atendido" />
+            <View marginR-14>
+              <RadioButton value="En proceso" label="En Proceso" />
             </View>
-            <View marginR-15>
-              <RadioButton value="Rechazado" label="Rechazado" />
+            <View marginR-14>
+              <RadioButton value="Atendido" label="Atendidos" />
             </View>
           </View>
         </RadioGroup>
@@ -143,7 +174,7 @@ const NotificationScreen = ({ navigation }) => {
                 return (
                   <Card
                     key={item.id}
-                    height={280}
+                    height={290}
                     borderRadius={25}
                     margin-15
                     style={{ backgroundColor: "#E07A5F" }}
@@ -153,7 +184,7 @@ const NotificationScreen = ({ navigation }) => {
                       borderRadius={25}
                       source={{ uri: item.photoURL }}
                       style={{
-                        height: 200,
+                        height: 190,
                         width: "100%",
                       }}
                       cover={false}
@@ -169,6 +200,7 @@ const NotificationScreen = ({ navigation }) => {
                         },
                       ]}
                       contentStyle={{
+                        alignText: "center",
                         alignItems: "center",
                         margin: 0,
                         padding: 0,
@@ -241,6 +273,7 @@ const NotificationScreen = ({ navigation }) => {
       >
         <ReportInformation
           Report={reportDataModal}
+          AttendedBy={dataAttendedBy}
           onCancel={handleCloseModalReport}
         />
       </Modal>
