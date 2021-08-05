@@ -2,13 +2,10 @@ import React from "react";
 import {
   ScrollView,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
   Alert,
-  TouchableOpacity,
 } from "react-native";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Text,
   TextField,
@@ -27,45 +24,36 @@ import translateMessage from "../utils/translateMessage";
 import { useToast } from "../utils/toast";
 import { useAuth } from "../utils/auth";
 import moment from "moment";
-import { numReport } from "../hooks/useReports";
 import { loadImageFromGallery } from "../utils/helpers";
 import { uploadImage } from "../services/reports";
 import { db } from "../utils/firebase";
+import Loading from "../components/Loading";
 
 const schema = yup.object().shape({
   title: yup.string().required("Ingrese un título a su denuncia."),
-  description: yup.string().required("Ingrese un contenido a su denuncia."),
+  description: yup.string().required("Ingrese una descripción a su denuncia."),
   incidentLocation: yup
     .string()
     .required("Ingrese el lugar en específico del abuso."),
-  incidentDate: yup
-    .string()
-    .required("Ingrese la fecha cuando ocurrio el suceso."),
-  type: yup.string().required("Escoja el tipo de acoso recibido"),
+  incidentDate: yup.string().required("Ingrese la fecha del suceso."),
+  type: yup.string().required("Escoja el tipo de acoso experimentado"),
 });
 
 const ReportScreen = ({ navigation }) => {
-  const { control, handleSubmit, errors, reset } = useForm({
+  const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
+  const [loading, setLoading] = useState(false);
   const addToast = useToast();
   const { user } = useAuth();
-
-  const dateOccurredRef = useRef();
-  const titleComplaintRef = useRef();
-  const complaintRef = useRef();
-  const placeRef = useRef();
-
-  //const reportsRef = dataReports.getReportsTotal(user.uid);
   const [resultImage, setResultImage] = useState(false);
   const [uriImage, setUriImage] = useState("");
-  const [numReportsRef] = numReport();
   const [uriUploadImage, setUriUploadImage] = useState("");
   const [selectedValueType, setSelectedValueType] = useState("");
 
   const handleImage = async () => {
+    setLoading(true);
     const result = await loadImageFromGallery([3, 2]);
-    //console.log("resultado imagen", result);
     if (result.image) {
       setResultImage(true);
       setUriImage(result.image);
@@ -76,15 +64,13 @@ const ReportScreen = ({ navigation }) => {
     if (!result.status) {
       return;
     }
-    const numReport = numReportsRef + 1;
-    const namePhoto = user.uid + "Report" + numReport;
-    //console.log("nomreb foto a guardar", namePhoto);
+    const namePhoto =
+      user.uid + "Report" + moment().format("YYYY-MM-DD kk:mm:ss");
     const resultUploadImage = await uploadImage(
       result.image,
       "places",
       namePhoto
     );
-    //console.log("url firebase photo", resultUploadImage);
     if (!resultUploadImage.statusResponse) {
       Alert.alert(
         "Ha ocurrido un error al almacenar la evidencia de la denuncia"
@@ -95,9 +81,11 @@ const ReportScreen = ({ navigation }) => {
       return;
     }
     setUriUploadImage(resultUploadImage.url);
+    setLoading(false);
   };
 
   const onCreate = async (data) => {
+    setLoading(true);
     try {
       let dataTotal = {};
       if (!resultImage) {
@@ -118,14 +106,8 @@ const ReportScreen = ({ navigation }) => {
           photoURL: uriUploadImage,
         };
       }
-
-      //console.log("datos del reporte total2", dataTotal);
-      //const dataReportsScreen = await dataReports();
-
-      //console.log("datos total report en reportScreen num ", numReportsRef);
-
       await db.collection("reports").add({ ...dataTotal });
-
+      setLoading(false);
       setResultImage(false);
       setUriImage("");
       setUriUploadImage("");
@@ -141,16 +123,17 @@ const ReportScreen = ({ navigation }) => {
         backgroundColor: "#CC0000",
         message: translateMessage(error.code),
       });
+      setLoading(false);
     }
   };
 
   return (
     <>
       <LinearGradient
-        // Background Linear Gradient
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
+      {loading && <Loading />}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "position" : "height"}
       >
@@ -163,19 +146,14 @@ const ReportScreen = ({ navigation }) => {
                 control={control}
                 name="title"
                 defaultValue=""
-                onFocus={() => {
-                  titleComplaintRef.current.focus();
-                }}
                 render={(props) => (
                   <TextField
-                    ref={titleComplaintRef}
                     style={styles.textFileReport}
                     placeholder="Título de la denuncia"
                     autoCapitalize="sentences"
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
-                    returnKeyType={"next"}
-                    onSubmitEditing={() => complaintRef.current.focus()}
+                    returnKeyType={"go"}
                     error={errors.title?.message}
                     enableErrors={!!errors.title}
                   />
@@ -183,28 +161,20 @@ const ReportScreen = ({ navigation }) => {
               />
 
               <Text h6 style={{ marginTop: 15 }}>
-                Cuerpo de la denuncia
+                Descripción de la denuncia
               </Text>
               <Controller
                 control={control}
                 name="description"
-                rules={{
-                  required: "Ingresa un contenido en el cuerpo de la denunciae",
-                }}
                 defaultValue=""
-                onFocus={() => {
-                  complaintRef.current.focus();
-                }}
                 render={(props) => (
                   <TextField
-                    ref={complaintRef}
                     style={styles.textAreaReport}
-                    //expandable
                     autoCapitalize="sentences"
                     multiline
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
-                    returnKeyType={"next"}
+                    returnKeyType={"go"}
                     error={errors.description?.message}
                     enableErrors={!!errors.description}
                   />
@@ -220,24 +190,27 @@ const ReportScreen = ({ navigation }) => {
                 defaultValue=""
                 render={(props) => (
                   <Picker
+                    enableModalBlur={false}
+                    topBarProps={{ title: "Tipo de acoso" }}
+                    style={{
+                      marginTop: 15,
+                      height: 45,
+                      paddingHorizontal: 15,
+                      borderColor: "#E8E8E8",
+                      borderWidth: 1,
+                      backgroundColor: "#F6F6F6",
+                      borderRadius: 5,
+                    }}
                     placeholder="Escoja el tipo de acoso"
-                    useNativePicker
                     value={selectedValueType}
                     error={errors.type?.message}
                     enableErrors={!!errors.type}
-                    topBarProps={{
-                      title: "Tipo de acoso",
-                      doneLabel: "Aceptar",
-                      cancelLabel: "Cancelar",
-                    }}
-                    //style={styles.textFileRegister}
                     onChange={(value) => {
-                      props.onChange(value);
-                      setSelectedValueType(value);
+                      props.onChange(value.value);
+                      setSelectedValueType(value.value);
                     }}
                   >
-                    <Picker.Item label="" value="" />
-                    <Picker.Item label="Fisico" value="Físico" />
+                    <Picker.Item label="Físico" value="Físico" />
                     <Picker.Item label="Psicológico" value="Psicológico" />
                     <Picker.Item label="Verbal" value="Verbal" />
                     <Picker.Item label="Escrito" value="Escrito" />
@@ -253,15 +226,11 @@ const ReportScreen = ({ navigation }) => {
                 control={control}
                 name="incidentLocation"
                 defaultValue=""
-                onFocus={() => {
-                  placeRef.current.focus();
-                }}
                 render={(props) => (
                   <TextField
-                    ref={placeRef}
                     style={styles.textFileReport}
                     placeholder="Lugar del suceso"
-                    autoCapitalize="words"
+                    autoCapitalize="sentences"
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
                     error={errors.incidentLocation?.message}
@@ -278,7 +247,6 @@ const ReportScreen = ({ navigation }) => {
                 defaultValue=""
                 render={(props) => (
                   <DateTimePicker
-                    ref={dateOccurredRef}
                     error={errors.incidentDate?.message}
                     enableErrors={!!errors.incidentDate}
                     placeholder={"Seleccione la fecha del suseso"}

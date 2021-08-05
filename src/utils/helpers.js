@@ -15,7 +15,7 @@ export const loadImageFromGallery = async (array) => {
     allowsEditing: true,
     aspect: array,
   });
-  //console.log("Resultadod e obtener imagen", result);
+
   if (result.cancelled) {
     return response;
   }

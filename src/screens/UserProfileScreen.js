@@ -14,7 +14,6 @@ const UserProfileScreen = ({ navigation }) => {
     <>
       <SafeAreaView style={styles.screenProfile}>
         <LinearGradient
-          // Background Linear Gradient
           colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
           style={styles.background2}
         />

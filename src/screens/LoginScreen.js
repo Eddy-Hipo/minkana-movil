@@ -24,8 +24,8 @@ import { Octicons } from "@expo/vector-icons";
 const schema = yup.object().shape({
   email: yup
     .string()
-    .required("Ingresa tu correo")
-    .email("Ingresa un correo válido"),
+    .required("Ingresa tu correo electrónico")
+    .email("Ingresa un correo electrónico válido"),
   password: yup.string().required("Ingresa tu clave"),
 });
 
@@ -41,11 +41,9 @@ const LoginScreen = ({ navigation }) => {
   const [viewPassword, setViewPassword] = useState(true);
 
   const onLogin = async (data) => {
-    console.log(data);
     setLoading(true);
     try {
       await login(data);
-      console.log("Inicio de sesión exitoso");
       setLoading(false);
     } catch (error) {
       addToast({
@@ -70,7 +68,6 @@ const LoginScreen = ({ navigation }) => {
       <View style={{ backgroundColor: "#3D405B", height: "100%" }}>
         <SafeAreaView style={styles.itemContainer2}>
           <LinearGradient
-            // Background Linear Gradient
             colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
             style={styles.background}
           />
@@ -91,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
                   render={({ onChange, value }) => (
                     <TextField
                       value={value}
-                      placeholder="Email"
+                      placeholder="Correo electrónico"
                       autoCapitalize={"none"}
                       autoCorrect={false}
                       textContentType={"emailAddress"}
@@ -116,7 +113,7 @@ const LoginScreen = ({ navigation }) => {
                       <TextField
                         style={styles.textFieldPassword}
                         secureTextEntry={viewPassword}
-                        placeholder="Clave"
+                        placeholder="Contraseña"
                         autoCapitalize="none"
                         autoCorrect={false}
                         onChangeText={(value) => onChange(value)}

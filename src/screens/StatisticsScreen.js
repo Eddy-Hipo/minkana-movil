@@ -7,11 +7,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
 import { BarChart } from "react-native-chart-kit";
 import { db } from "../utils/firebase";
+import Loading from "../components/Loading";
 
-const StatisticsScreen = ({ navigation }) => {
+const StatisticsScreen = () => {
+  const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(true);
-  const [disableButton, setDisableButton] = useState(true);
-  const [disablePicker, setDisablePicker] = useState(false);
   const [acceptDates, setAcceptDates] = useState(0);
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
@@ -23,12 +23,13 @@ const StatisticsScreen = ({ navigation }) => {
   const [num8, setNum8] = useState(0);
   const [num9, setNum9] = useState(0);
   const [num10, setNum10] = useState(0);
+  const [num11, setNum11] = useState(0);
   const [numOtros, setNumOtros] = useState(0);
   const [initialDate, setInitialDate] = useState(
     moment("2021-07-11").format("YYYY-MM-DD")
   );
   const [initialDate1, setInitialDate1] = useState(
-    moment("2021-07-11 12:48:35").format("YYYY-MM-DD kk:mm:ss")
+    moment("2021-07-10 01:00:00").format("YYYY-MM-DD kk:mm:ss")
   );
   const [finalDate, setFinalDate] = useState(
     moment().add(1, "days").format("YYYY-MM-DD")
@@ -38,23 +39,20 @@ const StatisticsScreen = ({ navigation }) => {
   );
 
   useEffect(() => {
-    setDisableButton(true);
-    setDisablePicker(false);
-    setIsSubscribed(true);
     if (isSubscribed) {
+      let d1 = 0;
+      let d2 = 0;
+      let d3 = 0;
+      let d4 = 0;
+      let d5 = 0;
+      let d6 = 0;
+      let d7 = 0;
+      let d8 = 0;
+      let d9 = 0;
+      let d10 = 0;
+      let d11 = 0;
+      let dOtros = 0;
       const getData = async () => {
-        let d1 = 0;
-        let d2 = 0;
-        let d3 = 0;
-        let d4 = 0;
-        let d5 = 0;
-        let d6 = 0;
-        let d7 = 0;
-        let d8 = 0;
-        let d9 = 0;
-        let d10 = 0;
-        let dOtros = 0;
-
         const data = await db
           .collection("reports")
           .where("emitionDate", ">=", initialDate1)
@@ -68,7 +66,6 @@ const StatisticsScreen = ({ navigation }) => {
               .doc(idWhistleblower)
               .get()
               .then((doc) => {
-                //console.log("Document data1:", doc);
                 if (doc.exists) {
                   switch (doc.data().ies) {
                     case "Escuela Politécnica Nacional":
@@ -88,6 +85,12 @@ const StatisticsScreen = ({ navigation }) => {
                       setNum4(d4);
                       break;
                     case "Universidad Internacional del Ecuador":
+                      d11++;
+                      dOtros++;
+                      setNumOtros(dOtros);
+                      setNum11(d11);
+                      break;
+                    case "Universidad Politécnica Salesiana":
                       d5++;
                       setNum5(d5);
                       break;
@@ -114,6 +117,7 @@ const StatisticsScreen = ({ navigation }) => {
                     case "Escuela Sup. Politécnica del Litoral":
                       d10++;
                       dOtros++;
+                      setNumOtros(dOtros);
                       setNum10(d10);
                       break;
                     default:
@@ -131,132 +135,30 @@ const StatisticsScreen = ({ navigation }) => {
           };
           getIES();
         });
-        setDisableButton(false);
-        setDisablePicker(true);
       };
       getData();
     }
-
-    return () => setIsSubscribed(false);
-  }, []);
-
-  useEffect(() => {
-    setDisablePicker(false);
-    setDisableButton(true);
-    setIsSubscribed(true);
-    if (isSubscribed) {
-      const getData = async () => {
-        let d1 = 0;
-        let d2 = 0;
-        let d3 = 0;
-        let d4 = 0;
-        let d5 = 0;
-        let d6 = 0;
-        let d7 = 0;
-        let d8 = 0;
-        let d9 = 0;
-        let d10 = 0;
-        let dOtros = 0;
-
-        const data = await db
-          .collection("reports")
-          .where("emitionDate", ">=", initialDate1)
-          .where("emitionDate", "<=", finalDate1)
-          .get();
-        data.docs.forEach((item) => {
-          const idWhistleblower = item.data().whistleblower;
-          const getIES = async () => {
-            await db
-              .collection("users")
-              .doc(idWhistleblower)
-              .get()
-              .then((doc) => {
-                //console.log("Document data1:", doc);
-                if (doc.exists) {
-                  switch (doc.data().ies) {
-                    case "Escuela Politécnica Nacional":
-                      d1++;
-                      setNum1(d1);
-                      break;
-                    case "Universidad Central del Ecuador":
-                      d2++;
-                      setNum2(d2);
-                      break;
-                    case "Pontificia Uni. Católica del Ecuador":
-                      d3++;
-                      setNum3(d3);
-                      break;
-                    case "Escuela Politécnica del Ejército":
-                      d4++;
-                      setNum4(d4);
-                      break;
-                    case "Universidad Internacional del Ecuador":
-                      d5++;
-                      setNum5(d5);
-                      break;
-                    case "Universidad San Francisco de Quito":
-                      d6++;
-                      setNum6(d6);
-                      break;
-                    case "Universidad de las Américas":
-                      d7++;
-                      setNum7(d7);
-                      break;
-                    case "Universidad Andina Simón Bolívar":
-                      d8++;
-                      dOtros++;
-                      setNumOtros(dOtros);
-                      setNum8(d8);
-                      break;
-                    case "Universidad Tecnológica Equinoccial":
-                      d9++;
-                      dOtros++;
-                      setNumOtros(dOtros);
-                      setNum9(d9);
-                      break;
-                    case "Escuela Sup. Politécnica del Litoral":
-                      d10++;
-                      dOtros++;
-                      setNum10(d10);
-                      break;
-                    default:
-                      dOtros++;
-                      setNumOtros(dOtros);
-                      break;
-                  }
-                } else {
-                  console.log("No such document!");
-                }
-              })
-              .catch((error) => {
-                console.log("Error getting document:", error);
-              });
-          };
-          getIES();
-        });
-        setDisablePicker(true);
-        setDisableButton(false);
-      };
-      getData();
-    }
-    setDisableButton(false);
-    return () => setIsSubscribed(false);
+    return () => {
+      setIsSubscribed(false);
+      setLoading(false);
+    };
   }, [acceptDates]);
 
   const handleAcceptDates = () => {
     if (moment(finalDate1).isAfter(moment(initialDate1))) {
       setAcceptDates(acceptDates + 1);
+      setLoading(true);
+      setIsSubscribed(true);
     }
   };
 
   return (
     <>
       <LinearGradient
-        // Background Linear Gradient
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
-
+      {loading && <Loading />}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "position" : "height"}
       >
@@ -276,8 +178,6 @@ const StatisticsScreen = ({ navigation }) => {
                 <DateTimePicker
                   value={new Date(moment(initialDate).format("YYYY-MM-DD"))}
                   style={styles.textFileRegister}
-                  editable={disablePicker}
-                  placeholder={"Fecha Inicio"}
                   minimumDate={
                     new Date(moment("2021-07-11").format("YYYY-MM-DD"))
                   }
@@ -288,10 +188,6 @@ const StatisticsScreen = ({ navigation }) => {
                   }
                   dateFormat={"YYYY-MM-DD"}
                   onChange={(value) => {
-                    console.log(
-                      "valor fecha: ",
-                      moment(value).add(1, "days").format("YYYY-MM-DD")
-                    );
                     setInitialDate(
                       moment(value).add(1, "days").format("YYYY-MM-DD")
                     );
@@ -302,9 +198,7 @@ const StatisticsScreen = ({ navigation }) => {
                 />
                 <DateTimePicker
                   value={new Date(finalDate)}
-                  editable={disablePicker}
                   style={styles.textFileRegister}
-                  placeholder={"Fecha Fin"}
                   minimumDate={
                     new Date(
                       moment(initialDate).add(7, "days").format("YYYY-MM-DD")
@@ -326,7 +220,6 @@ const StatisticsScreen = ({ navigation }) => {
                 label="Aceptar"
                 labelStyle={{ fontSize: 15, padding: 3 }}
                 enableShadow
-                disabled={disableButton}
                 onPress={handleAcceptDates}
                 style={{
                   backgroundColor: "#3D405B",
@@ -336,9 +229,20 @@ const StatisticsScreen = ({ navigation }) => {
                   marginBottom: 20,
                 }}
               />
-              <Text h1 style={{ marginBottom: -5 }}>
+              <Text h1 style={{ marginBottom: 8 }}>
                 Gráfica
               </Text>
+              <Text
+                h6
+                style={{
+                  fontWeight: "700",
+                  textAlign: "center",
+                  marginBottom: 5,
+                }}
+              >
+                Cantidad de Reportes por Universidad
+              </Text>
+
               <BarChart
                 data={{
                   labels: [
@@ -346,7 +250,7 @@ const StatisticsScreen = ({ navigation }) => {
                     "UCE",
                     "PUCE",
                     "ESPE",
-                    "UIDE",
+                    "UPS",
                     "USFQ",
                     "UDLA",
                     "Otros",
@@ -366,7 +270,7 @@ const StatisticsScreen = ({ navigation }) => {
                     },
                   ],
                 }}
-                width={405} // from react-native
+                width={405}
                 height={300}
                 chartConfig={{
                   backgroundGradientFrom: "#3D405B",
@@ -441,10 +345,20 @@ const StatisticsScreen = ({ navigation }) => {
               </Text>
               <View style={{ flex: 1 }} row>
                 <Text style={{ flex: 0.7 }}>
-                  Universidad Internacional del Ecuador (UIDE)
+                  Universidad Politécnica Salesiana (UPS)
                 </Text>
                 <Text style={{ flex: 0.13 }} />
                 <Text style={{ flex: 0.17 }}>{num5}</Text>
+              </View>
+              <Text style={{ fontWeight: "bold" }} marginB-10>
+                ________________________________________________
+              </Text>
+              <View style={{ flex: 1 }} row>
+                <Text style={{ flex: 0.7 }}>
+                  Universidad Internacional del Ecuador (UIDE)
+                </Text>
+                <Text style={{ flex: 0.13 }} />
+                <Text style={{ flex: 0.17 }}>{num11}</Text>
               </View>
               <Text style={{ fontWeight: "bold" }} marginB-10>
                 ________________________________________________

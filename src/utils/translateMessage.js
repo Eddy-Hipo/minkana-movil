@@ -9,7 +9,7 @@ const translateMessage = (message) => {
     "auth/too-many-requests":
       "Demasiadas solicitudes de ingreso, espere un momento y vuelva a intentarlo",
     "auth/user-disabled":
-      "Su cuenta ha sido deshabilitada, comuníquese con el administrador de la aplicación (chalo.salvador@grupomenta.com)",
+      "Su cuenta ha sido deshabilitada, comuníquese con el administrador de la aplicación (gaby.2ax.88@gmail.com)",
     "auth/email-already-in-use":
       "Ya existe una cuenta con el correo electrónico",
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 import { Button, View, Text, Image } from "react-native-ui-lib";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../styles/styles";
@@ -20,7 +20,6 @@ const LandingScreen = ({ navigation }) => {
     return (
       <View style={styles.itemContainer}>
         <LinearGradient
-          // Background Linear Gradient
           colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
           style={styles.background}
         />
@@ -83,7 +82,7 @@ const LandingScreen = ({ navigation }) => {
             >
               El acoso sexual en las Instituciones de Educación Superior (IES)
               es una forma de violencia de género que, a día de hoy, afecta a
-              colectivos de estudiantes docentes y personal administrativo y ser
+              colectivos de estudiantes, docentes, personal administrativo y de
               servicios.
             </Text>
           </View>
