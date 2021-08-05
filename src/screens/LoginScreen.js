@@ -46,6 +46,7 @@ const LoginScreen = ({ navigation }) => {
     try {
       await login(data);
       console.log("Inicio de sesión exitoso");
+      setLoading(false);
     } catch (error) {
       addToast({
         position: "top",

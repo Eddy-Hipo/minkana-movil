@@ -5,23 +5,36 @@ import { useAuth } from "../utils/auth";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
 import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
+import Loading from "../components/Loading";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleAccount, setModalVisibleAccount] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user.role !== "ROLE_WHISTLEBLOWER") {
       handleOpenModal();
+    } else {
+      if (user.account !== "Habilitada") {
+        handleOpenModalAccount();
+      }
     }
+    setLoading(false);
   }, []);
 
   const handleOpenModal = () => {
     setModalVisible(true);
   };
 
+  const handleOpenModalAccount = () => {
+    setModalVisibleAccount(true);
+  };
+
   const handleCloseModal = () => {
     setModalVisible(false);
+    setModalVisibleAccount(false);
     logout();
   };
 
@@ -32,6 +45,7 @@ const HomeScreen = ({ navigation }) => {
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
+      {loading && <Loading />}
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View marginT-30>
@@ -105,6 +119,41 @@ const HomeScreen = ({ navigation }) => {
             Su cuenta esta registrada como un usuario Administrador, por esa
             razón no puede acceder a la aplicación móvil, porfavor acceder a la
             aplicación web para ejercer acciones de Administrador.
+          </Text>
+          <Text margin-30 h4>
+            Gracias por su comprensión.
+          </Text>
+          <Button
+            label="Aceptar"
+            onPress={handleCloseModal}
+            style={{
+              backgroundColor: "#E07A5F",
+              margin: 90,
+            }}
+          />
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        statusBarTranslucent={true}
+        visible={modalVisibleAccount}
+        onRequestClose={handleCloseModal}
+      >
+        <View flex style={{ height: "100%", justifyContent: "space-around" }}>
+          <LinearGradient
+            // Background Linear Gradient
+            colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
+            style={styles.background2}
+          />
+          <Text marginT-100 h1 style={{ color: "#CC0000" }}>
+            Cuenta Inhabilitada
+          </Text>
+          <Text margin-30 h4 style={{ lineHeight: 30, textAlign: "justify" }}>
+            Su cuenta ha sido inhabilitada por un Administrador, debido a que
+            incumple con las normas establecidas, por esa razón no puede acceder
+            a la aplicación móvil, porfavor comunicarse con el administrador de
+            su IES.
           </Text>
           <Text margin-30 h4>
             Gracias por su comprensión.

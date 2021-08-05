@@ -49,6 +49,12 @@ Typography.loadTypographies({
     fontWeight: "300",
     lineHeight: 20,
   },
+
+  h7: {
+    fontSize: 15,
+    fontWeight: "200",
+    lineHeight: 20,
+  },
 });
 
 /**

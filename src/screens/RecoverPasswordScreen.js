@@ -17,6 +17,7 @@ import { useToast } from "../utils/toast";
 import translateMessage from "../utils/translateMessage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PropTypes from "prop-types";
+import { LinearGradient } from "expo-linear-gradient";
 
 const ReviewSchema = yup.object().shape({
   email: yup
@@ -58,59 +59,83 @@ const RecoverPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {loading && (
-        <LoaderScreen
-          message="Un momento..."
-          overlay
-          backgroundColor={Colors.primary + "aa"}
-          loaderColor={Colors.white}
-          messageStyle={{ color: Colors.white }}
-          margin-10
-        />
-      )}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-      >
-        <View>
-          <View>
-            <Text h1 black>
-              Recuperar contraseña
-            </Text>
-            <Controller
-              control={control}
-              name="email"
-              defaultValue=""
-              onFocus={() => {
-                emailRef.current.focus();
-              }}
-              render={({ onChange, value }) => (
-                <TextField
-                  placeholder="Correo electrónico"
-                  autoCapitalize={"none"}
-                  autoCorrect={false}
-                  ref={emailRef}
-                  keyboardType={"email-address"}
-                  autoCompleteType={"email"}
-                  onChangeText={(value) => onChange(value)}
-                  onSubmitEditing={() => emailRef.current.focus()}
-                  value={value}
-                  error={errors.email?.message}
-                  enableErrors={!!errors.email}
-                />
-              )}
-            />
-            <Button margin-15 label="Enviar" onPress={handleSubmit(onSubmit)} />
-            <Button
-              link
+    <>
+      <View style={{ backgroundColor: "#3D405B", height: "100%" }}>
+        <SafeAreaView style={styles.itemContainer2}>
+          <LinearGradient
+            // Background Linear Gradient
+            colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
+            style={styles.background}
+          />
+          {loading && (
+            <LoaderScreen
+              message="Un momento..."
+              overlay
+              backgroundColor={Colors.primary + "aa"}
+              loaderColor={Colors.white}
+              messageStyle={{ color: Colors.white }}
               margin-10
-              label={"Cancelar"}
-              onPress={() => navigation.navigate("LoginScreen")}
             />
-          </View>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          )}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "position" : "height"}
+          >
+            <View>
+              <View>
+                <Text h1 black>
+                  Recuperar contraseña
+                </Text>
+                <Controller
+                  control={control}
+                  name="email"
+                  defaultValue=""
+                  onFocus={() => {
+                    emailRef.current.focus();
+                  }}
+                  render={({ onChange, value }) => (
+                    <TextField
+                      placeholder="Correo electrónico"
+                      autoCapitalize={"none"}
+                      autoCorrect={false}
+                      ref={emailRef}
+                      keyboardType={"email-address"}
+                      autoCompleteType={"email"}
+                      onChangeText={(value) => onChange(value)}
+                      onSubmitEditing={() => emailRef.current.focus()}
+                      value={value}
+                      error={errors.email?.message}
+                      enableErrors={!!errors.email}
+                    />
+                  )}
+                />
+                <Button
+                  margin-15
+                  label="Enviar"
+                  labelStyle={{ fontWeight: "bold", fontSize: 20, padding: 5 }}
+                  enableShadow
+                  style={{
+                    backgroundColor: "#E07A5F",
+                    margin: 20,
+                    marginTop: 45,
+                    marginLeft: 50,
+                    marginRight: 50,
+                  }}
+                  onPress={handleSubmit(onSubmit)}
+                />
+                <Button
+                  link
+                  margin-20
+                  color="white"
+                  label={"Cancelar"}
+                  labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                  onPress={() => navigation.navigate("LoginScreen")}
+                />
+              </View>
+            </View>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </View>
+    </>
   );
 };
 

@@ -22,7 +22,6 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
-import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../styles/styles";
 import translateMessage from "../utils/translateMessage";
 import { useToast } from "../utils/toast";
@@ -32,7 +31,6 @@ import { numReport } from "../hooks/useReports";
 import { loadImageFromGallery } from "../utils/helpers";
 import { uploadImage } from "../services/reports";
 import { db } from "../utils/firebase";
-import { Ionicons } from "@expo/vector-icons";
 
 const schema = yup.object().shape({
   title: yup.string().required("Ingrese un título a su denuncia."),
@@ -156,211 +154,201 @@ const ReportScreen = ({ navigation }) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "position" : "height"}
       >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ marginBottom: 5, marginTop: 2 }}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View marginT-10 marginL-10 marginR-10>
-                <Text
-                  h1
-                  style={{
-                    color: "#E07A5F",
-                  }}
-                >
-                  Ingrese su denuncia
-                </Text>
-                <Text h6>Titulo</Text>
-                <Controller
-                  control={control}
-                  name="title"
-                  defaultValue=""
-                  onFocus={() => {
-                    titleComplaintRef.current.focus();
-                  }}
-                  render={(props) => (
-                    <TextField
-                      ref={titleComplaintRef}
-                      style={styles.textFileReport}
-                      placeholder="Título de la denuncia"
-                      autoCapitalize="sentences"
-                      autoCorrect={false}
-                      onChangeText={(value) => props.onChange(value)}
-                      returnKeyType={"next"}
-                      onSubmitEditing={() => complaintRef.current.focus()}
-                      error={errors.title?.message}
-                      enableErrors={!!errors.title}
-                    />
-                  )}
-                />
+        <View style={{ marginBottom: 5, marginTop: 2 }}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View marginT-10 marginL-10 marginR-10>
+              <Text h1>Ingrese su denuncia</Text>
+              <Text h6>Titulo</Text>
+              <Controller
+                control={control}
+                name="title"
+                defaultValue=""
+                onFocus={() => {
+                  titleComplaintRef.current.focus();
+                }}
+                render={(props) => (
+                  <TextField
+                    ref={titleComplaintRef}
+                    style={styles.textFileReport}
+                    placeholder="Título de la denuncia"
+                    autoCapitalize="sentences"
+                    autoCorrect={false}
+                    onChangeText={(value) => props.onChange(value)}
+                    returnKeyType={"next"}
+                    onSubmitEditing={() => complaintRef.current.focus()}
+                    error={errors.title?.message}
+                    enableErrors={!!errors.title}
+                  />
+                )}
+              />
 
-                <Text h6 style={{ marginTop: 15 }}>
-                  Cuerpo de la denuncia
-                </Text>
-                <Controller
-                  control={control}
-                  name="description"
-                  rules={{
-                    required:
-                      "Ingresa un contenido en el cuerpo de la denunciae",
-                  }}
-                  defaultValue=""
-                  onFocus={() => {
-                    complaintRef.current.focus();
-                  }}
-                  render={(props) => (
-                    <TextField
-                      ref={complaintRef}
-                      style={styles.textAreaReport}
-                      //expandable
-                      autoCapitalize="sentences"
-                      multiline
-                      autoCorrect={false}
-                      onChangeText={(value) => props.onChange(value)}
-                      returnKeyType={"next"}
-                      error={errors.description?.message}
-                      enableErrors={!!errors.description}
-                    />
-                  )}
-                />
+              <Text h6 style={{ marginTop: 15 }}>
+                Cuerpo de la denuncia
+              </Text>
+              <Controller
+                control={control}
+                name="description"
+                rules={{
+                  required: "Ingresa un contenido en el cuerpo de la denunciae",
+                }}
+                defaultValue=""
+                onFocus={() => {
+                  complaintRef.current.focus();
+                }}
+                render={(props) => (
+                  <TextField
+                    ref={complaintRef}
+                    style={styles.textAreaReport}
+                    //expandable
+                    autoCapitalize="sentences"
+                    multiline
+                    autoCorrect={false}
+                    onChangeText={(value) => props.onChange(value)}
+                    returnKeyType={"next"}
+                    error={errors.description?.message}
+                    enableErrors={!!errors.description}
+                  />
+                )}
+              />
 
-                <Text h6 style={{ marginTop: 15 }}>
-                  Tipo de acoso
-                </Text>
-                <Controller
-                  name="type"
-                  control={control}
-                  defaultValue=""
-                  render={(props) => (
-                    <Picker
-                      placeholder="Escoja el tipo de acoso"
-                      useNativePicker
-                      value={selectedValueType}
-                      error={errors.type?.message}
-                      enableErrors={!!errors.type}
-                      topBarProps={{
-                        title: "Tipo de acoso",
-                        doneLabel: "Aceptar",
-                        cancelLabel: "Cancelar",
-                      }}
-                      //style={styles.textFileRegister}
-                      onChange={(value) => {
-                        props.onChange(value);
-                        setSelectedValueType(value);
-                      }}
-                    >
-                      <Picker.Item label="" value="" />
-                      <Picker.Item label="Fisico" value="Físico" />
-                      <Picker.Item label="Psicológico" value="Psicológico" />
-                      <Picker.Item label="Verbal" value="Verbal" />
-                      <Picker.Item label="Escrito" value="Escrito" />
-                      <Picker.Item label="Visual" value="Visual" />
-                    </Picker>
-                  )}
-                />
+              <Text h6 style={{ marginTop: 15 }}>
+                Tipo de acoso
+              </Text>
+              <Controller
+                name="type"
+                control={control}
+                defaultValue=""
+                render={(props) => (
+                  <Picker
+                    placeholder="Escoja el tipo de acoso"
+                    useNativePicker
+                    value={selectedValueType}
+                    error={errors.type?.message}
+                    enableErrors={!!errors.type}
+                    topBarProps={{
+                      title: "Tipo de acoso",
+                      doneLabel: "Aceptar",
+                      cancelLabel: "Cancelar",
+                    }}
+                    //style={styles.textFileRegister}
+                    onChange={(value) => {
+                      props.onChange(value);
+                      setSelectedValueType(value);
+                    }}
+                  >
+                    <Picker.Item label="" value="" />
+                    <Picker.Item label="Fisico" value="Físico" />
+                    <Picker.Item label="Psicológico" value="Psicológico" />
+                    <Picker.Item label="Verbal" value="Verbal" />
+                    <Picker.Item label="Escrito" value="Escrito" />
+                    <Picker.Item label="Visual" value="Visual" />
+                  </Picker>
+                )}
+              />
 
-                <Text h6 style={{ marginTop: 15 }}>
-                  Lugar dentro de la IES
-                </Text>
-                <Controller
-                  control={control}
-                  name="incidentLocation"
-                  defaultValue=""
-                  onFocus={() => {
-                    placeRef.current.focus();
-                  }}
-                  render={(props) => (
-                    <TextField
-                      ref={placeRef}
-                      style={styles.textFileReport}
-                      placeholder="Lugar del suceso"
-                      autoCapitalize="words"
-                      autoCorrect={false}
-                      onChangeText={(value) => props.onChange(value)}
-                      error={errors.incidentLocation?.message}
-                      enableErrors={!!errors.incidentLocation}
-                    />
-                  )}
-                />
-                <Text h6 style={{ marginTop: 15 }}>
-                  Fecha del suceso
-                </Text>
-                <Controller
-                  control={control}
-                  name="incidentDate"
-                  defaultValue=""
-                  render={(props) => (
-                    <DateTimePicker
-                      ref={dateOccurredRef}
-                      error={errors.incidentDate?.message}
-                      enableErrors={!!errors.incidentDate}
-                      placeholder={"Seleccione la fecha del suseso"}
-                      minimumDate={
-                        new Date(
-                          moment().subtract(15, "days").format("YYYY-MM-DD")
-                        )
-                      }
-                      maximumDate={
-                        new Date(moment().add(1, "days").format("YYYY-MM-DD"))
-                      }
-                      dateFormat={"YYYY-MM-DD"}
-                      onChange={(value) => {
-                        let fe1 = moment(value).format("YYYY-MM-DD");
-                        props.onChange(fe1);
-                      }}
-                    />
-                  )}
-                />
+              <Text h6 style={{ marginTop: 15 }}>
+                Lugar dentro de la IES
+              </Text>
+              <Controller
+                control={control}
+                name="incidentLocation"
+                defaultValue=""
+                onFocus={() => {
+                  placeRef.current.focus();
+                }}
+                render={(props) => (
+                  <TextField
+                    ref={placeRef}
+                    style={styles.textFileReport}
+                    placeholder="Lugar del suceso"
+                    autoCapitalize="words"
+                    autoCorrect={false}
+                    onChangeText={(value) => props.onChange(value)}
+                    error={errors.incidentLocation?.message}
+                    enableErrors={!!errors.incidentLocation}
+                  />
+                )}
+              />
+              <Text h6 style={{ marginTop: 15 }}>
+                Fecha del suceso
+              </Text>
+              <Controller
+                control={control}
+                name="incidentDate"
+                defaultValue=""
+                render={(props) => (
+                  <DateTimePicker
+                    ref={dateOccurredRef}
+                    error={errors.incidentDate?.message}
+                    enableErrors={!!errors.incidentDate}
+                    placeholder={"Seleccione la fecha del suseso"}
+                    minimumDate={
+                      new Date(
+                        moment().subtract(15, "days").format("YYYY-MM-DD")
+                      )
+                    }
+                    maximumDate={
+                      new Date(moment().add(1, "days").format("YYYY-MM-DD"))
+                    }
+                    dateFormat={"YYYY-MM-DD"}
+                    onChange={(value) => {
+                      let fe1 = moment(value).format("YYYY-MM-DD");
+                      props.onChange(fe1);
+                    }}
+                  />
+                )}
+              />
 
-                <Text h6 style={{ marginTop: 15, marginBottom: 10 }}>
-                  Adjunta una prueba (Opcional)
-                </Text>
-                <View marginH-15>
-                  {resultImage ? (
-                    <Image
-                      borderRadius={25}
-                      source={{ uri: uriImage }}
-                      style={{
-                        height: 250,
-                        width: "100%",
-                      }}
-                      cover={false}
-                    />
-                  ) : null}
-                </View>
-                <Button
-                  label="Selecciona una imagen"
-                  labelStyle={{ fontSize: 15, padding: 3 }}
-                  enableShadow
-                  onPress={handleImage}
-                  style={{
-                    backgroundColor: "#3D405B",
-                    marginLeft: 70,
-                    marginRight: 70,
-                    marginTop: 20,
-                    marginBottom: 20,
-                  }}
-                />
-
-                <Button
-                  label="Crear reporte"
-                  labelStyle={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    padding: 5,
-                  }}
-                  enableShadow
-                  onPress={handleSubmit(onCreate)}
-                  style={{
-                    backgroundColor: "#E07A5F",
-                    marginLeft: 50,
-                    marginRight: 50,
-                    marginTop: 20,
-                    marginBottom: 20,
-                  }}
-                />
+              <Text h6 style={{ marginTop: 15, marginBottom: 10 }}>
+                Adjunta una prueba (Opcional)
+              </Text>
+              <View marginH-15>
+                {resultImage ? (
+                  <Image
+                    borderRadius={25}
+                    source={{ uri: uriImage }}
+                    style={{
+                      height: 250,
+                      width: "100%",
+                    }}
+                    cover={false}
+                  />
+                ) : null}
               </View>
-            </ScrollView>
-          </View>
-        </TouchableWithoutFeedback>
+              <Button
+                label="Selecciona una imagen"
+                labelStyle={{ fontSize: 14, padding: 2 }}
+                enableShadow
+                onPress={handleImage}
+                style={{
+                  backgroundColor: "#3D405B",
+                  marginLeft: 80,
+                  marginRight: 80,
+                  marginTop: 15,
+                  marginBottom: 20,
+                }}
+              />
+
+              <Button
+                label="Crear reporte"
+                labelStyle={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 5,
+                }}
+                enableShadow
+                onPress={handleSubmit(onCreate)}
+                style={{
+                  backgroundColor: "#E07A5F",
+                  marginLeft: 50,
+                  marginRight: 50,
+                  marginTop: 20,
+                  marginBottom: 20,
+                }}
+              />
+            </View>
+          </ScrollView>
+        </View>
       </KeyboardAvoidingView>
     </>
   );

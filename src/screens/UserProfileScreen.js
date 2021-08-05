@@ -1,7 +1,6 @@
 import React from "react";
 import { ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import { Text, View, Button } from "react-native-ui-lib";
-import PropTypes from "prop-types";
 import styles from "../styles/styles";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import moment from "moment";
