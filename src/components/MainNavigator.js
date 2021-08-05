@@ -1,13 +1,12 @@
 import React from "react";
 import HomeScreen from "../screens/HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Text, Button, View } from "react-native-ui-lib";
+import { Text, Button } from "react-native-ui-lib";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from "@react-navigation/drawer";
 import StatisticsScreen from "../screens/StatisticsScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
@@ -103,7 +102,6 @@ const MainStackNavigator = ({ navigation }) => {
       <Stack.Screen
         name="EditUserProfile"
         component={EditUserProfileScreen}
-        //style={{ backgroundColor: "red" }}
         options={{ headerTitle: "Actualizar Perfil", headerShown: false }}
       />
     </Stack.Navigator>

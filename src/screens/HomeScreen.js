@@ -41,7 +41,6 @@ const HomeScreen = ({ navigation }) => {
   return (
     <>
       <LinearGradient
-        // Background Linear Gradient
         colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
         style={styles.background2}
       />
@@ -108,7 +107,6 @@ const HomeScreen = ({ navigation }) => {
       >
         <View flex style={{ height: "100%", justifyContent: "space-around" }}>
           <LinearGradient
-            // Background Linear Gradient
             colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
             style={styles.background2}
           />
@@ -116,8 +114,8 @@ const HomeScreen = ({ navigation }) => {
             Aviso!!!
           </Text>
           <Text margin-30 h4 style={{ lineHeight: 30, textAlign: "justify" }}>
-            Su cuenta esta registrada como un usuario Administrador, por esa
-            razón no puede acceder a la aplicación móvil, porfavor acceder a la
+            Su cuenta esta registrada como usuario Administrador, por esa razón
+            no puede acceder a la aplicación móvil, porfavor acceder a la
             aplicación web para ejercer acciones de Administrador.
           </Text>
           <Text margin-30 h4>
@@ -142,7 +140,6 @@ const HomeScreen = ({ navigation }) => {
       >
         <View flex style={{ height: "100%", justifyContent: "space-around" }}>
           <LinearGradient
-            // Background Linear Gradient
             colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
             style={styles.background2}
           />

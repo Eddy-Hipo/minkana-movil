@@ -8,9 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F1DE",
     paddingHorizontal: 15,
     flex: 1,
-    // flexDirection: "column",
     justifyContent: "space-around",
-    // paddingTop: 50,
   },
   view: {
     height: "100%",
@@ -76,9 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3D405B",
     paddingHorizontal: 15,
     flex: 1,
-    // flexDirection: "column",
     justifyContent: "space-around",
-    // paddingTop: 50,
   },
 
   //Estilo de campo contraseña
@@ -106,6 +102,16 @@ const styles = StyleSheet.create({
   },
 
   //Estido de editar perfil
+  textFileRegisterEdit: {
+    marginTop: 5,
+    height: 45,
+    paddingHorizontal: 15,
+    borderColor: "#E8E8E8",
+    borderWidth: 1,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 5,
+  },
+
   screenEditProfile: {
     backgroundColor: "#F4F1DE",
     height: "100%",
@@ -141,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   textAreaReport: {
-    height: 90,
+    height: 115,
     marginTop: 10,
     paddingHorizontal: 10,
     borderColor: "#E8E8E8",

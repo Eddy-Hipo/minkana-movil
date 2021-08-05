@@ -63,7 +63,6 @@ const RecoverPasswordScreen = ({ navigation }) => {
       <View style={{ backgroundColor: "#3D405B", height: "100%" }}>
         <SafeAreaView style={styles.itemContainer2}>
           <LinearGradient
-            // Background Linear Gradient
             colors={["#E1E1E1", "#D5D5D5", "#3D405B"]}
             style={styles.background}
           />

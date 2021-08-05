@@ -7,8 +7,6 @@ const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;
 const MAX_TIMER_DURATION_MS = 60 * 1000;
 if (Platform.OS === "android") {
-  // Work around issue `Setting a timer for long time`
-  // see: https://github.com/firebase/firebase-js-sdk/issues/97
   const timerFix = {};
   const runTask = (id, fn, ttl, args) => {
     const waitingTime = ttl - Date.now();
@@ -67,12 +65,9 @@ function useAuthProvider() {
 
   const handleUser = (user) => {
     if (user) {
-      // si tengo sesión activa
       setUser(user);
-
       return user;
     } else {
-      // no tengo sesión activa
       setUser(false);
       return false;
     }
@@ -106,8 +101,6 @@ function useAuthProvider() {
   }
 
   async function login(data) {
-    console.log("email", data.email);
-    console.log("password", data.password);
     try {
       await auth.signInWithEmailAndPassword(data.email, data.password);
       return true;
@@ -126,41 +119,30 @@ function useAuthProvider() {
     }
   }
 
+  async function changePasswordF(data) {
+    try {
+      await auth.currentUser.updatePassword(data.password);
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   const sendPasswordResetEmail = async (email) => {
     await auth.sendPasswordResetEmail(email);
     return true;
   };
-  //
-  // const confirmPasswordReset = (password, code) => {
-  //   const resetCode = code || getFromQueryString('oobCode');
-  //
-  //   return firebase
-  //     .auth()
-  //     .confirmPasswordReset(resetCode, password)
-  //     .then(() => {
-  //       return true;
-  //     });
-  // };
-
-  // }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (userAuthData) => {
       if (userAuthData) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        console.log("SESIÓN ACTIVA", userAuthData);
         db.collection("users")
           .doc(userAuthData.uid)
           .onSnapshot((doc) => {
-            //setDat(doc.data());
             const dat1 = doc.data();
-            console.log("userDAta", dat1);
             handleUser(dat1);
           });
       } else {
-        // User is signed out
-        console.log("SIN SESIÓN", userAuthData);
         handleUser(false);
       }
     });
@@ -175,6 +157,6 @@ function useAuthProvider() {
     login,
     logout,
     sendPasswordResetEmail,
-    // confirmPasswordReset
+    changePasswordF,
   };
 }

@@ -12,7 +12,7 @@ import { View, Text, Button, Image } from "react-native-ui-lib";
 
 import PropTypes from "prop-types";
 
-const ReportInformation = ({ Report, onCancel, AttendedBy, navigation }) => {
+const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
   return (
     <>
       <KeyboardAvoidingView
@@ -20,7 +20,6 @@ const ReportInformation = ({ Report, onCancel, AttendedBy, navigation }) => {
       >
         <View style={{ height: "100%" }}>
           <LinearGradient
-            // Background Linear Gradient
             colors={["#E1E1E1", "#D5D5D5", "#F4F1DE"]}
             style={styles.background2}
           />

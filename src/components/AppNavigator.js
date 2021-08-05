@@ -7,7 +7,7 @@ import Loading from "./Loading";
 
 const AppNavigator = () => {
   const { user } = useAuth();
-  const isAuthenticated = !!user; // Esto equivale a hacer user !== null && user !== false;
+  const isAuthenticated = !!user;
 
   useEffect(() => {
     const init = async () => {
