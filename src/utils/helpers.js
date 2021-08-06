@@ -4,11 +4,9 @@ import { Alert } from "react-native";
 
 export const loadImageFromGallery = async (array) => {
   const response = { status: false, image: null };
-  const resultPermissions = await Permissions.askAsync(Permissions.CAMERA);
+  const resultPermissions = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   if (resultPermissions.status === "denied") {
-    Alert.alert(
-      "Debes de darle permiso a la aplicación para acceder a las imagenes del teléfono"
-    );
+    Alert.alert("Porfavor, dar permisos a Minkana para acceder a las imagenes");
     return response;
   }
   const result = await ImagePicker.launchImageLibraryAsync({

@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
 import { db } from "../utils/firebase";
 import ReportInformation from "../components/ReportInformation";
+import moment from "moment";
 
 const NotificationScreen = () => {
   const { user } = useAuth();
@@ -159,7 +160,9 @@ const NotificationScreen = () => {
                         flex
                         content={[
                           {
-                            text: `${item.title}  \n ${item.incidentDate}`,
+                            text: `${item.title}  \n ${moment(
+                              item.incidentDate
+                            ).format("YYYY-MM-DD")}`,
                             text70: true,
                             grey10: true,
                           },

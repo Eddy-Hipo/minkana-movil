@@ -35,7 +35,7 @@ const schema = yup.object().shape({
   incidentLocation: yup
     .string()
     .required("Ingrese el lugar en específico del abuso."),
-  incidentDate: yup.string().required("Ingrese la fecha del suceso."),
+  incidentDate: yup.number().required("Ingrese la fecha del suceso."),
   type: yup.string().required("Escoja el tipo de acoso experimentado"),
 });
 
@@ -60,8 +60,10 @@ const ReportScreen = ({ navigation }) => {
     } else {
       setResultImage(false);
       setUriImage("");
+      setLoading(false);
     }
     if (!result.status) {
+      setLoading(false);
       return;
     }
     const namePhoto =
@@ -78,6 +80,7 @@ const ReportScreen = ({ navigation }) => {
       setResultImage(false);
       setUriImage("");
       setUriUploadImage("");
+      setLoading(false);
       return;
     }
     setUriUploadImage(resultUploadImage.url);
@@ -93,7 +96,7 @@ const ReportScreen = ({ navigation }) => {
           ...data,
           whistleblower: user.uid,
           status: "Pendiente",
-          emitionDate: moment().format("YYYY-MM-DD kk:mm:ss"),
+          emitionDate: moment().valueOf(),
           photoURL:
             "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/places%2Fimagendenuncia.jpg?alt=media&token=02c8315f-8433-4167-b26f-58a3c59b5d0e",
         };
@@ -102,7 +105,7 @@ const ReportScreen = ({ navigation }) => {
           ...data,
           whistleblower: user.uid,
           status: "Pendiente",
-          emitionDate: moment().format("YYYY-MM-DD kk:mm:ss"),
+          emitionDate: moment().valueOf(),
           photoURL: uriUploadImage,
         };
       }
@@ -244,7 +247,7 @@ const ReportScreen = ({ navigation }) => {
               <Controller
                 control={control}
                 name="incidentDate"
-                defaultValue=""
+                defaultValue={undefined}
                 render={(props) => (
                   <DateTimePicker
                     error={errors.incidentDate?.message}
@@ -260,8 +263,8 @@ const ReportScreen = ({ navigation }) => {
                     }
                     dateFormat={"YYYY-MM-DD"}
                     onChange={(value) => {
-                      let fe1 = moment(value).format("YYYY-MM-DD");
-                      props.onChange(fe1);
+                      const tp = moment(value).valueOf();
+                      props.onChange(tp);
                     }}
                   />
                 )}
