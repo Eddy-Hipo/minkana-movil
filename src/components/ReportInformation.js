@@ -8,8 +8,8 @@ import {
 import styles from "../styles/styles";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, Button, Image } from "react-native-ui-lib";
-
+import { View, Text, Image } from "react-native-ui-lib";
+import moment from "moment";
 import PropTypes from "prop-types";
 
 const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
@@ -73,7 +73,7 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
                     Fecha del incidente
                   </Text>
                   <Text h7 style={{ marginBottom: 20 }}>
-                    {Report.incidentDate}
+                    {moment(Report.incidentDate).format("YYYY-MM-DD")}
                   </Text>
                 </View>
               </View>
@@ -92,7 +92,7 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
                       Fecha de atención
                     </Text>
                     <Text h7 style={{ marginBottom: 20 }}>
-                      {Report.resolutionDate}
+                      {moment(Report.resolutionDate).format("YYYY-MM-DD")}
                     </Text>
                   </View>
                 </View>

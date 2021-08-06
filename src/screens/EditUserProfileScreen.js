@@ -330,7 +330,13 @@ const EditUserProfileScreen = ({ navigation }) => {
                 )}
               />
 
-              <Text marginT-20 style={{ fontWeight: "bold" }} h6>
+              <Text
+                marginT-20
+                style={{
+                  fontWeight: "bold",
+                }}
+                h6
+              >
                 Tipo de miembro
               </Text>
               <Controller
@@ -365,7 +371,13 @@ const EditUserProfileScreen = ({ navigation }) => {
               <Button
                 link
                 color="#3D405B"
-                labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                labelStyle={{
+                  fontWeight: "bold",
+                  fontSize: 25,
+                  textDecorationLine: "underline",
+                  textDecorationStyle: "solid",
+                  textDecorationColor: "#000000",
+                }}
                 label={"Actualizar Contraseña"}
                 style={{
                   marginTop: 40,

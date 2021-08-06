@@ -25,7 +25,7 @@ import { Octicons } from "@expo/vector-icons";
 const schema = yup.object().shape({
   name: yup.string().required("Ingresa tu nombre"),
   lastname: yup.string().required("Ingresa tu apellido"),
-  birthdate: yup.string().required("Selecciona una fecha"),
+  birthdate: yup.number().required("Selecciona una fecha"),
   gender: yup.string().required("Selecciona un género"),
   ies: yup.string().required("Selecciona una universidad"),
   memberType: yup.string().required("Selecciona un rol en la universidad"),
@@ -153,7 +153,7 @@ const RegisterScreen = ({ navigation }) => {
                   <Controller
                     control={control}
                     name="birthdate"
-                    defaultValue=""
+                    defaultValue={undefined}
                     render={(props) => (
                       <DateTimePicker
                         style={styles.textFileRegister}
@@ -172,8 +172,8 @@ const RegisterScreen = ({ navigation }) => {
                         }
                         dateFormat={"YYYY-MM-DD"}
                         onChange={(value) => {
-                          let fe1 = moment(value).format("YYYY-MM-DD");
-                          props.onChange(fe1);
+                          const tp = moment(value).valueOf();
+                          props.onChange(tp);
                         }}
                       />
                     )}

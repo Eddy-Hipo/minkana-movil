@@ -29,37 +29,50 @@ const StatisticsScreen = () => {
     moment("2021-07-11").format("YYYY-MM-DD")
   );
   const [initialDate1, setInitialDate1] = useState(
-    moment("2021-07-10 01:00:00").format("YYYY-MM-DD kk:mm:ss")
+    moment("2021-07-10 01:00:00").valueOf()
   );
   const [finalDate, setFinalDate] = useState(
     moment().add(1, "days").format("YYYY-MM-DD")
   );
-  const [finalDate1, setFinalDate1] = useState(
-    moment().add(1, "days").format("YYYY-MM-DD kk:mm:ss")
-  );
+  const [finalDate1, setFinalDate1] = useState(moment().valueOf());
 
   useEffect(() => {
     if (isSubscribed) {
-      let d1 = 0;
-      let d2 = 0;
-      let d3 = 0;
-      let d4 = 0;
-      let d5 = 0;
-      let d6 = 0;
-      let d7 = 0;
-      let d8 = 0;
-      let d9 = 0;
-      let d10 = 0;
-      let d11 = 0;
-      let dOtros = 0;
       const getData = async () => {
         const data = await db
           .collection("reports")
           .where("emitionDate", ">=", initialDate1)
           .where("emitionDate", "<=", finalDate1)
           .get();
+        let d1 = 0;
+        let d2 = 0;
+        let d3 = 0;
+        let d4 = 0;
+        let d5 = 0;
+        let d6 = 0;
+        let d7 = 0;
+        let d8 = 0;
+        let d9 = 0;
+        let d10 = 0;
+        let d11 = 0;
+        let dOtros = 0;
+        setNum1(0);
+        setNum2(0);
+        setNum3(0);
+        setNum4(0);
+        setNum5(0);
+        setNum6(0);
+        setNum7(0);
+        setNum8(0);
+        setNum9(0);
+        setNum10(0);
+        setNum11(0);
+        setNumOtros(0);
         data.docs.forEach((item) => {
           const idWhistleblower = item.data().whistleblower;
+          console.log("data buscar fecha: ", item.data());
+          console.log("fechaini: ", initialDate1);
+          console.log("fechafina: ", finalDate1);
           const getIES = async () => {
             await db
               .collection("users")
@@ -83,12 +96,6 @@ const StatisticsScreen = () => {
                     case "Escuela Politécnica del Ejército":
                       d4++;
                       setNum4(d4);
-                      break;
-                    case "Universidad Internacional del Ecuador":
-                      d11++;
-                      dOtros++;
-                      setNumOtros(dOtros);
-                      setNum11(d11);
                       break;
                     case "Universidad Politécnica Salesiana":
                       d5++;
@@ -120,6 +127,12 @@ const StatisticsScreen = () => {
                       setNumOtros(dOtros);
                       setNum10(d10);
                       break;
+                    case "Universidad Internacional del Ecuador":
+                      d11++;
+                      dOtros++;
+                      setNumOtros(dOtros);
+                      setNum11(d11);
+                      break;
                     default:
                       dOtros++;
                       setNumOtros(dOtros);
@@ -147,6 +160,7 @@ const StatisticsScreen = () => {
   const handleAcceptDates = () => {
     if (moment(finalDate1).isAfter(moment(initialDate1))) {
       setAcceptDates(acceptDates + 1);
+      console.log("contador aceptar: ", acceptDates);
       setLoading(true);
       setIsSubscribed(true);
     }
@@ -191,9 +205,7 @@ const StatisticsScreen = () => {
                     setInitialDate(
                       moment(value).add(1, "days").format("YYYY-MM-DD")
                     );
-                    setInitialDate1(
-                      moment(value).format("YYYY-MM-DD kk:mm:ss")
-                    );
+                    setInitialDate1(moment(value).valueOf());
                   }}
                 />
                 <DateTimePicker
@@ -212,7 +224,7 @@ const StatisticsScreen = () => {
                     setFinalDate(
                       moment(value).add(1, "days").format("YYYY-MM-DD")
                     );
-                    setFinalDate1(moment(value).format("YYYY-MM-DD kk:mm:ss"));
+                    setFinalDate1(moment(value).valueOf());
                   }}
                 />
               </View>
