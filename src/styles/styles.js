@@ -58,9 +58,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   viewButtons: {
+    flex: 1,
     position: "absolute",
     top: "80%",
-    left: "25%",
+    left: "50%",
+    transform: [{ translateX: -Dimensions.get("window").width * 0.24 }],
   },
   background: {
     position: "absolute",
@@ -154,6 +156,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "white",
     borderRadius: 5,
+  },
+
+  //stadisticas
+  ViewBorder: {
+    borderBottomWidth: 2,
+    borderBottomColor: "#000000",
+    paddingBottom: 15,
   },
 });
 

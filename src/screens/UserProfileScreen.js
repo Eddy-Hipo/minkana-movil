@@ -53,43 +53,43 @@ const UserProfileScreen = ({ navigation }) => {
           >
             <FontAwesome5 name="user-secret" size={120} color="#000000" />
           </View>
-          <View center>
+          <View marginH-30>
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Nombre
             </Text>
-            <Text marginB-17 h5>
+            <Text marginL-5 marginB-17 h6>
               {user.name} {user.lastname}
             </Text>
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Correo electrónico
             </Text>
-            <Text marginB-17 h5>
+            <Text marginL-5 marginB-17 h6>
               {user.email}
             </Text>
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Edad
             </Text>
-            <Text marginB-17 h5>
-              {moment().diff(user.birthdate, "years")}
+            <Text marginL-5 marginB-17 h6>
+              {moment().diff(user.birthdate, "years")} años
             </Text>
 
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Género
             </Text>
-            <Text marginB-17 h5>
+            <Text marginL-5 marginB-17 h6>
               {user.gender}
             </Text>
 
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Institución de Educación Superior
             </Text>
-            <Text marginB-17 h5>
+            <Text marginL-5 marginB-17 h6>
               {user.ies}
             </Text>
             <Text style={{ fontWeight: "bold" }} marginB-7 h6>
               Tipo
             </Text>
-            <Text marginB-20 h5>
+            <Text marginL-5 marginB-20 h6>
               {user.memberType}
             </Text>
             <Button

@@ -22,9 +22,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
 import { Octicons } from "@expo/vector-icons";
 
+const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$/;
+
 const schema = yup.object().shape({
-  name: yup.string().required("Ingresa tu nombre"),
-  lastname: yup.string().required("Ingresa tu apellido"),
+  name: yup
+    .string()
+    .required("Ingresa tu nombre")
+    .matches(nameRegex, "Solo se permiten letras"),
+  lastname: yup
+    .string()
+    .required("Ingresa tu apellido")
+    .matches(nameRegex, "Solo se permiten letras"),
   birthdate: yup.number().required("Selecciona una fecha"),
   gender: yup.string().required("Selecciona un género"),
   ies: yup.string().required("Selecciona una universidad"),
@@ -149,6 +157,16 @@ const RegisterScreen = ({ navigation }) => {
                     />
                   )}
                 />
+                <Text
+                  h8
+                  style={{
+                    marginTop: 5,
+                    marginBottom: -15,
+                    color: "#CC0000",
+                  }}
+                >
+                  Nota: Para seleccionar una fecha, presionar el botón aceptar.
+                </Text>
                 <View row spread>
                   <Controller
                     control={control}

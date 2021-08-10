@@ -1,7 +1,7 @@
 import React from "react";
 import HomeScreen from "../screens/HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Text, Button } from "react-native-ui-lib";
+import { Text, Button, View } from "react-native-ui-lib";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
   createDrawerNavigator,
@@ -119,12 +119,34 @@ const CustomDrawerContent = ({ ...props }) => {
       }}
     >
       <DrawerItemList {...props} />
-      <Button
-        label="Cerrar sesión"
-        style={{ position: "absolute", bottom: 10, alignSelf: "center" }}
-        onPress={logout}
-        link
-      />
+      <View
+        style={{
+          position: "absolute",
+          bottom: 40,
+          alignSelf: "center",
+          width: "100%",
+          height: 50,
+          backgroundColor: "#3D405B",
+          paddingTop: 13,
+        }}
+      >
+        <Button
+          label="Cerrar sesión"
+          style={{
+            alignSelf: "center",
+          }}
+          onPress={logout}
+          labelStyle={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: "white",
+            textDecorationLine: "underline",
+            textDecorationStyle: "solid",
+            textDecorationColor: "#000000",
+          }}
+          link
+        />
+      </View>
     </DrawerContentScrollView>
   );
 };

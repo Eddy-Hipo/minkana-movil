@@ -29,7 +29,6 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
               paddingT-15
               paddingB-7
               row
-              flex
               spread
               style={{ backgroundColor: "#3D405B" }}
             >
@@ -97,6 +96,19 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
                   </View>
                 </View>
               ) : null}
+              <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                IES donde ocurrio el suceso
+              </Text>
+              <Text
+                h7
+                style={{
+                  marginBottom: 20,
+                  lineHeight: 24,
+                  textAlign: "justify",
+                }}
+              >
+                {Report.iesOccurred}
+              </Text>
               <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
                 Lugar específico del suceso
               </Text>

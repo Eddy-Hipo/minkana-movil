@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions } from "react-native";
 import { Button, View, Text, Image } from "react-native-ui-lib";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "../styles/styles";
-import Carousel from "react-native-snap-carousel";
+import Carousel, { Pagination } from "react-native-snap-carousel";
 import { scrollInterpolator, animatedStyles } from "../utils/animations";
 import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign, Entypo } from "@expo/vector-icons";
@@ -16,6 +16,8 @@ const LandingScreen = ({ navigation }) => {
   for (let i = 0; i < 3; i++) {
     DATA.push(i);
   }
+  const [aux, setAux] = useState(0);
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemContainer}>
@@ -49,24 +51,24 @@ const LandingScreen = ({ navigation }) => {
             <Text marginB-40 h1 style={{ color: "#E07A5F" }}>
               Sabías que...
             </Text>
-
-            <View
-              marginB-30
-              style={{
-                alignItems: "center",
-                height: 90,
-                width: 90,
-                borderRadius: 50,
-                backgroundColor: "#E07A5F",
-                marginLeft: "36%",
-              }}
-            >
-              <Entypo
-                name="location-pin"
-                size={50}
-                color="white"
-                style={{ paddingTop: 20 }}
-              />
+            <View center spread>
+              <View
+                marginB-30
+                style={{
+                  alignItems: "center",
+                  height: 90,
+                  width: 90,
+                  borderRadius: 50,
+                  backgroundColor: "#E07A5F",
+                }}
+              >
+                <Entypo
+                  name="location-pin"
+                  size={50}
+                  color="white"
+                  style={{ paddingTop: 20 }}
+                />
+              </View>
             </View>
 
             <Text
@@ -91,23 +93,24 @@ const LandingScreen = ({ navigation }) => {
             marginB-100
             style={{ width: "80%", backgroundColor: "transparent" }}
           >
-            <View
-              marginB-30
-              style={{
-                alignItems: "center",
-                height: 90,
-                width: 90,
-                borderRadius: 50,
-                backgroundColor: "#E07A5F",
-                marginLeft: "36%",
-              }}
-            >
-              <AntDesign
-                name="rocket1"
-                size={40}
-                color="white"
-                style={{ paddingTop: 25 }}
-              />
+            <View spread center>
+              <View
+                marginB-30
+                style={{
+                  alignItems: "center",
+                  height: 90,
+                  width: 90,
+                  borderRadius: 50,
+                  backgroundColor: "#E07A5F",
+                }}
+              >
+                <AntDesign
+                  name="rocket1"
+                  size={40}
+                  color="white"
+                  style={{ paddingTop: 25 }}
+                />
+              </View>
             </View>
             <Text
               marginB-25
@@ -136,6 +139,11 @@ const LandingScreen = ({ navigation }) => {
         <SafeAreaView>
           <Carousel
             data={DATA}
+            loop={true}
+            loopClonesPerSide={1}
+            autoplay={true}
+            autoplayDelay={900}
+            autoplayInterval={7000}
             renderItem={renderItem}
             sliderWidth={SLIDER_WIDTH}
             itemWidth={ITEM_WIDTH}
@@ -145,6 +153,27 @@ const LandingScreen = ({ navigation }) => {
             slideInterpolatedStyle={animatedStyles}
             useScrollView={true}
           />
+          <View
+            style={{
+              flex: 1,
+              position: "absolute",
+              top: "10%",
+              left: "50%",
+              transform: [
+                { translateX: -Dimensions.get("window").width * 0.13 },
+              ],
+            }}
+          >
+            <Pagination
+              dotsLength={3}
+              activeDotIndex={aux}
+              dotColor={"rgba(0, 0, 0, 0.92)"}
+              inactiveDotColor={"black"}
+              inactiveDotOpacity={0.92}
+              inactiveDotScale={0.92}
+            />
+          </View>
+
           <View style={styles.viewButtons}>
             <Button
               style={{
@@ -157,7 +186,11 @@ const LandingScreen = ({ navigation }) => {
             />
             <Button
               link
-              labelStyle={{ fontWeight: "bold", fontSize: 20, color: "white" }}
+              labelStyle={{
+                fontWeight: "bold",
+                fontSize: 20,
+                color: "white",
+              }}
               label={"Crear una cuenta"}
               onPress={() => navigation.navigate("RegisterScreen")}
             />

@@ -12,6 +12,7 @@ const translateMessage = (message) => {
       "Su cuenta ha sido deshabilitada, comuníquese con el administrador de la aplicación (gaby.2ax.88@gmail.com)",
     "auth/email-already-in-use":
       "Ya existe una cuenta con el correo electrónico",
+    "auth/network-request-failed": "Compruebe su conexión a internet",
   };
 
   return messages[message] || message;
