@@ -20,9 +20,17 @@ import translateMessage from "../utils/translateMessage";
 import { db } from "../utils/firebase";
 import Loading from "../components/Loading";
 
+const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]*$/;
+
 const schema = yup.object().shape({
-  name: yup.string().required("Ingresa tu nombre"),
-  lastname: yup.string().required("Ingresa tu apellido"),
+  name: yup
+    .string()
+    .required("Ingresa tu nombre")
+    .matches(nameRegex, "Solo se permiten letras"),
+  lastname: yup
+    .string()
+    .required("Ingresa tu apellido")
+    .matches(nameRegex, "Solo se permiten letras"),
   gender: yup.string().required("Selecciona un género"),
   ies: yup.string().required("Selecciona una universidad"),
   memberType: yup.string().required("Selecciona un rol en la universidad"),

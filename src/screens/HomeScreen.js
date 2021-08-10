@@ -4,14 +4,17 @@ import { Button, Text, View } from "react-native-ui-lib";
 import { useAuth } from "../utils/auth";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "../styles/styles";
-import { AntDesign, Ionicons, Entypo } from "@expo/vector-icons";
+import { AntDesign, Ionicons, Entypo, FontAwesome } from "@expo/vector-icons";
 import Loading from "../components/Loading";
+import { db } from "../utils/firebase";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useAuth();
+  const [isSubscribed, setIsSubscribed] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleAccount, setModalVisibleAccount] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [numNotifications, setNumNotifications] = useState(0);
 
   useEffect(() => {
     if (user.role !== "ROLE_WHISTLEBLOWER") {
@@ -21,7 +24,25 @@ const HomeScreen = ({ navigation }) => {
         handleOpenModalAccount();
       }
     }
+    setIsSubscribed(true);
+
+    if (isSubscribed) {
+      let aux = 0;
+      aux = numNotifications;
+      db.collection("reports")
+        .where("whistleblower", "==", user.uid)
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "modified") {
+              aux = aux + 1;
+              setNumNotifications(aux);
+            }
+          });
+        });
+      aux = 0;
+    }
     setLoading(false);
+    return () => setIsSubscribed(false);
   }, []);
 
   const handleOpenModal = () => {
@@ -67,10 +88,31 @@ const HomeScreen = ({ navigation }) => {
               <View center style={styles.cardHome}>
                 <TouchableOpacity
                   onPress={() => {
+                    setNumNotifications(0);
+
                     navigation.navigate("Notificaciones");
                   }}
                 >
-                  <View center style={{ width: "100%", height: "100%" }}>
+                  <View
+                    center
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "relative",
+                    }}
+                  >
+                    {numNotifications !== 0 ? (
+                      <View
+                        style={{
+                          position: "absolute",
+                          top: "10%",
+                          left: "50%",
+                        }}
+                      >
+                        <FontAwesome name="circle" size={25} color="red" />
+                      </View>
+                    ) : null}
+
                     <Ionicons name="notifications" size={100} color="white" />
                     <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
                       Notificaciones

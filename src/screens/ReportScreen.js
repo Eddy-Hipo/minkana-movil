@@ -36,7 +36,8 @@ const schema = yup.object().shape({
     .string()
     .required("Ingrese el lugar en específico del abuso."),
   incidentDate: yup.number().required("Ingrese la fecha del suceso."),
-  type: yup.string().required("Escoja el tipo de acoso experimentado"),
+  type: yup.string().required("Escoja el tipo de acoso experimentado."),
+  iesOccurred: yup.string().required("Selecciona una universidad"),
 });
 
 const ReportScreen = ({ navigation }) => {
@@ -48,12 +49,23 @@ const ReportScreen = ({ navigation }) => {
   const { user } = useAuth();
   const [resultImage, setResultImage] = useState(false);
   const [uriImage, setUriImage] = useState("");
+  const [selectedValueIes, setSelectedValueIes] = useState(user.ies);
   const [uriUploadImage, setUriUploadImage] = useState("");
   const [selectedValueType, setSelectedValueType] = useState("");
 
   const handleImage = async () => {
     setLoading(true);
-    const result = await loadImageFromGallery([3, 2]);
+    let result;
+    try {
+      result = await loadImageFromGallery([3, 2]);
+    } catch (error) {
+      addToast({
+        position: "top",
+        backgroundColor: "#CC0000",
+        message: "Revise su conexión de Internet",
+      });
+    }
+
     if (result.image) {
       setResultImage(true);
       setUriImage(result.image);
@@ -144,7 +156,7 @@ const ReportScreen = ({ navigation }) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View marginT-10 marginL-10 marginR-10>
               <Text h1>Ingrese su denuncia</Text>
-              <Text h6>Titulo</Text>
+              <Text h6>Título</Text>
               <Controller
                 control={control}
                 name="title"
@@ -180,6 +192,47 @@ const ReportScreen = ({ navigation }) => {
                     returnKeyType={"go"}
                     error={errors.description?.message}
                     enableErrors={!!errors.description}
+                  />
+                )}
+              />
+
+              <Text h6 style={{ marginTop: 15 }}>
+                Fecha del suceso
+              </Text>
+              <Text
+                h8
+                style={{
+                  marginTop: 1,
+                  marginBottom: -5,
+                  color: "#CC0000",
+                }}
+              >
+                Nota: Para seleccionar una fecha, presionar el botón aceptar.
+              </Text>
+              <Controller
+                control={control}
+                name="incidentDate"
+                defaultValue={undefined}
+                render={(props) => (
+                  <DateTimePicker
+                    onBackgroundPress={false}
+                    display="default"
+                    error={errors.incidentDate?.message}
+                    enableErrors={!!errors.incidentDate}
+                    placeholder={"Seleccione la fecha del suceso"}
+                    minimumDate={
+                      new Date(
+                        moment().subtract(15, "days").format("YYYY-MM-DD")
+                      )
+                    }
+                    maximumDate={
+                      new Date(moment().add(1, "days").format("YYYY-MM-DD"))
+                    }
+                    dateFormat={"YYYY-MM-DD"}
+                    onChange={(value) => {
+                      const tp = moment(value).valueOf();
+                      props.onChange(tp);
+                    }}
                   />
                 )}
               />
@@ -223,6 +276,82 @@ const ReportScreen = ({ navigation }) => {
               />
 
               <Text h6 style={{ marginTop: 15 }}>
+                IES donde ocurrio
+              </Text>
+              <Controller
+                name="iesOccurred"
+                control={control}
+                defaultValue={user.ies}
+                render={(props) => (
+                  <Picker
+                    enableModalBlur={false}
+                    topBarProps={{ title: "Universidades" }}
+                    style={styles.textFileRegisterEdit}
+                    showSearch
+                    searchPlaceholder={"Busca tu universidad"}
+                    searchStyle={{
+                      color: "black",
+                      placeholderTextColor: "black",
+                    }}
+                    placeholder="Escoje tu universidad"
+                    value={selectedValueIes}
+                    error={errors.iesOccurred?.message}
+                    enableErrors={!!errors.iesOccurred}
+                    onChange={(value) => {
+                      props.onChange(value.value);
+                      setSelectedValueIes(value.value);
+                    }}
+                  >
+                    <Picker.Item
+                      label="Escuela Politécnica Nacional (EPN)"
+                      value="Escuela Politécnica Nacional"
+                    />
+                    <Picker.Item
+                      label="Universidad Central del Ecuador (UCE)"
+                      value="Universidad Central del Ecuador"
+                    />
+                    <Picker.Item
+                      label="Pontificia Uni. Católica del Ecuador (PUCE)"
+                      value="Pontificia Uni. Católica del Ecuador"
+                    />
+                    <Picker.Item
+                      label="Escuela Politécnica del Ejército (ESPE)"
+                      value="Escuela Politécnica del Ejército"
+                    />
+                    <Picker.Item
+                      label="Escuela Sup. Politécnica del Litoral (ESPOL)"
+                      value="Escuela Sup. Politécnica del Litoral"
+                    />
+                    <Picker.Item
+                      label="Universidad Politécnica Salesiana (UPS)"
+                      value="Universidad Politécnica Salesiana"
+                    />
+                    <Picker.Item
+                      label="Universidad Andina Simón Bolívar (UASB)"
+                      value="Universidad Andina Simón Bolívar"
+                    />
+
+                    <Picker.Item
+                      label="Universidad Internacional del Ecuador (UIDE)"
+                      value="Universidad Internacional del Ecuador"
+                    />
+                    <Picker.Item
+                      label="Universidad San Francisco de Quito (USFQ)"
+                      value="Universidad San Francisco de Quito"
+                    />
+                    <Picker.Item
+                      label="Universidad Tecnológica Equinoccial (UTE)"
+                      value="Universidad Tecnológica Equinoccial"
+                    />
+                    <Picker.Item
+                      label="Universidad de las Américas (UDLA)"
+                      value="Universidad de las Américas"
+                    />
+                  </Picker>
+                )}
+              />
+
+              <Text h6 style={{ marginTop: 15 }}>
                 Lugar dentro de la IES
               </Text>
               <Controller
@@ -238,34 +367,6 @@ const ReportScreen = ({ navigation }) => {
                     onChangeText={(value) => props.onChange(value)}
                     error={errors.incidentLocation?.message}
                     enableErrors={!!errors.incidentLocation}
-                  />
-                )}
-              />
-              <Text h6 style={{ marginTop: 15 }}>
-                Fecha del suceso
-              </Text>
-              <Controller
-                control={control}
-                name="incidentDate"
-                defaultValue={undefined}
-                render={(props) => (
-                  <DateTimePicker
-                    error={errors.incidentDate?.message}
-                    enableErrors={!!errors.incidentDate}
-                    placeholder={"Seleccione la fecha del suseso"}
-                    minimumDate={
-                      new Date(
-                        moment().subtract(15, "days").format("YYYY-MM-DD")
-                      )
-                    }
-                    maximumDate={
-                      new Date(moment().add(1, "days").format("YYYY-MM-DD"))
-                    }
-                    dateFormat={"YYYY-MM-DD"}
-                    onChange={(value) => {
-                      const tp = moment(value).valueOf();
-                      props.onChange(tp);
-                    }}
                   />
                 )}
               />
