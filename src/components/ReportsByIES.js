@@ -23,7 +23,7 @@ import PropTypes from "prop-types";
 import { db } from "../utils/firebase";
 import ReportInformation from "../components/ReportInformation";
 
-const ReportsByIES = ({ ies, onCancel }) => {
+const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
   const [verification, setVerification] = useState(false);
   const [totalReports, setTotalReports] = useState({});
   const [searchReports, setSearchReports] = useState({});
@@ -33,12 +33,16 @@ const ReportsByIES = ({ ies, onCancel }) => {
   const [searchWord, setSearchWord] = useState("");
   const [dataAttendedBy, setDataAttendedBy] = useState({ data: false });
 
+  //console.log("inicial dateREf: ", initialDateRef);
+  //console.log("final dateREf: ", finalDateRef);
   useEffect(() => {
     if (isSubscribed) {
       const getData = async () => {
         const data = await db
           .collection("reports")
           .where("iesOccurred", "==", ies)
+          .where("emitionDate", ">=", initialDateRef)
+          .where("emitionDate", "<=", finalDateRef)
           .get();
         const planArray = [];
         data.docs.forEach((item) => {
