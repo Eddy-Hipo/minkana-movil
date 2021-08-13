@@ -50,7 +50,6 @@ const ReportScreen = ({ navigation }) => {
   const [resultImage, setResultImage] = useState(false);
   const [uriImage, setUriImage] = useState("");
   const [selectedValueIes, setSelectedValueIes] = useState(user.ies);
-  const [uriUploadImage, setUriUploadImage] = useState("");
   const [selectedValueType, setSelectedValueType] = useState("");
 
   const handleImage = async () => {
@@ -78,24 +77,7 @@ const ReportScreen = ({ navigation }) => {
       setLoading(false);
       return;
     }
-    const namePhoto =
-      user.uid + "Report" + moment().format("YYYY-MM-DD kk:mm:ss");
-    const resultUploadImage = await uploadImage(
-      result.image,
-      "places",
-      namePhoto
-    );
-    if (!resultUploadImage.statusResponse) {
-      Alert.alert(
-        "Ha ocurrido un error al almacenar la evidencia de la denuncia"
-      );
-      setResultImage(false);
-      setUriImage("");
-      setUriUploadImage("");
-      setLoading(false);
-      return;
-    }
-    setUriUploadImage(resultUploadImage.url);
+
     setLoading(false);
   };
 
@@ -113,19 +95,49 @@ const ReportScreen = ({ navigation }) => {
             "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/places%2Fimagendenuncia.jpg?alt=media&token=02c8315f-8433-4167-b26f-58a3c59b5d0e",
         };
       } else {
+        const namePhoto =
+          user.uid + "Report" + moment().format("YYYY-MM-DD kk:mm:ss");
+        const resultUploadImage = await uploadImage(
+          uriImage,
+          "places",
+          namePhoto
+        );
+        if (!resultUploadImage.statusResponse) {
+          Alert.alert(
+            "Ha ocurrido un error al almacenar la evidencia de la denuncia"
+          );
+          setResultImage(false);
+          setUriImage("");
+
+          setLoading(false);
+          return;
+        }
+
         dataTotal = {
           ...data,
           whistleblower: user.uid,
           status: "Pendiente",
           emitionDate: moment().valueOf(),
-          photoURL: uriUploadImage,
+          photoURL: resultUploadImage.url,
         };
       }
-      await db.collection("reports").add({ ...dataTotal });
+      //let idRef;
+      await db
+        .collection("reports")
+        .add({ ...dataTotal })
+        .then(async (docRef) => {
+          //console.log("Document written with ID: ", docRef.id);
+          //idRef = docRef.id;
+          await db
+            .collection("reports")
+            .doc(docRef.id)
+            .update({ id: docRef.id });
+        });
+
       setLoading(false);
       setResultImage(false);
       setUriImage("");
-      setUriUploadImage("");
+
       navigation.navigate("Home");
       addToast({
         position: "top",

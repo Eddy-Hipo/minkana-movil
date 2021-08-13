@@ -21,18 +21,6 @@ const StatisticsScreen = () => {
   const [loading, setLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(true);
   const [acceptDates, setAcceptDates] = useState(0);
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
-  const [num3, setNum3] = useState(0);
-  const [num4, setNum4] = useState(0);
-  const [num5, setNum5] = useState(0);
-  const [num6, setNum6] = useState(0);
-  const [num7, setNum7] = useState(0);
-  const [num8, setNum8] = useState(0);
-  const [num9, setNum9] = useState(0);
-  const [num10, setNum10] = useState(0);
-  const [num11, setNum11] = useState(0);
-  const [numOtros, setNumOtros] = useState(0);
   const [initialDate, setInitialDate] = useState(
     moment("2021-07-11").format("YYYY-MM-DD")
   );
@@ -43,6 +31,7 @@ const StatisticsScreen = () => {
     moment().add(1, "days").format("YYYY-MM-DD")
   );
   const [finalDate1, setFinalDate1] = useState(moment().valueOf());
+  const [numReports2, setNumReports2] = useState([]);
 
   useEffect(() => {
     if (isSubscribed) {
@@ -59,78 +48,55 @@ const StatisticsScreen = () => {
         let d10 = 0;
         let d11 = 0;
         let dOtros = 0;
-
-        setNum1(0);
-        setNum2(0);
-        setNum3(0);
-        setNum4(0);
-        setNum5(0);
-        setNum6(0);
-        setNum7(0);
-        setNum8(0);
-        setNum9(0);
-        setNum10(0);
-        setNum11(0);
-        setNumOtros(0);
         await db
           .collection("reports")
           .where("emitionDate", ">=", initialDate1)
           .where("emitionDate", "<=", finalDate1)
           .get()
           .then((querySnapshot) => {
+            const auxNumReports2 = [];
             querySnapshot.forEach((doc) => {
-              // doc.data() is never undefined for query doc snapshots
               switch (doc.data().iesOccurred) {
                 case "Escuela Politécnica Nacional":
                   d1++;
-                  setNum1(d1);
                   break;
                 case "Universidad Central del Ecuador":
                   d2++;
-                  setNum2(d2);
                   break;
                 case "Pontificia Uni. Católica del Ecuador":
                   d3++;
-                  setNum3(d3);
                   break;
                 case "Escuela Politécnica del Ejército":
                   d4++;
-                  setNum4(d4);
                   break;
                 case "Universidad Politécnica Salesiana":
                   d5++;
-                  setNum5(d5);
                   break;
                 case "Universidad San Francisco de Quito":
                   d6++;
-                  setNum6(d6);
                   break;
                 case "Universidad de las Américas":
                   d7++;
-                  setNum7(d7);
                   break;
                 case "Universidad Andina Simón Bolívar":
                   d8++;
-                  setNum8(d8);
                   break;
                 case "Universidad Tecnológica Equinoccial":
                   d9++;
-                  setNum9(d9);
                   break;
                 case "Escuela Sup. Politécnica del Litoral":
                   d10++;
-                  setNum10(d10);
                   break;
                 case "Universidad Internacional del Ecuador":
                   d11++;
-                  setNum11(d11);
                   break;
                 default:
                   dOtros++;
-                  setNumOtros(dOtros);
                   break;
               }
             });
+            auxNumReports2.push(d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11);
+            setNumReports2(auxNumReports2);
           })
           .catch((error) => {
             console.log("Error getting documents: ", error);
@@ -267,19 +233,7 @@ const StatisticsScreen = () => {
                     ],
                     datasets: [
                       {
-                        data: [
-                          num1,
-                          num2,
-                          num3,
-                          num4,
-                          num5,
-                          num6,
-                          num7,
-                          num8,
-                          num9,
-                          num10,
-                          num11,
-                        ],
+                        data: numReports2,
                       },
                     ],
                   }}
@@ -322,7 +276,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num1}</Text>
+                  <Text marginT-8>{numReports2[0]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -352,7 +306,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num2}</Text>
+                  <Text marginT-8>{numReports2[1]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -382,7 +336,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num3}</Text>
+                  <Text marginT-8>{numReports2[2]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -412,7 +366,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num4}</Text>
+                  <Text marginT-8>{numReports2[3]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -442,7 +396,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num5}</Text>
+                  <Text marginT-8>{numReports2[5]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -472,7 +426,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num11}</Text>
+                  <Text marginT-8>{numReports2[10]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -502,7 +456,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num6}</Text>
+                  <Text marginT-8>{numReports2[5]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -532,7 +486,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num7}</Text>
+                  <Text marginT-8>{numReports2[6]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -562,7 +516,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num8}</Text>
+                  <Text marginT-8>{numReports2[7]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -592,7 +546,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num9}</Text>
+                  <Text marginT-8>{numReports2[8]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -622,7 +576,7 @@ const StatisticsScreen = () => {
                 </Text>
                 <Text style={{ flex: 0.02 }} />
                 <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{num10}</Text>
+                  <Text marginT-8>{numReports2[9]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -659,6 +613,8 @@ const StatisticsScreen = () => {
         }}
       >
         <ReportsByIES
+          initialDateRef={initialDate1}
+          finalDateRef={finalDate1}
           ies={reportDataIesSearchModal}
           onCancel={handleCloseModalReport}
         />

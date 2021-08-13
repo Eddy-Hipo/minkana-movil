@@ -157,16 +157,7 @@ const RegisterScreen = ({ navigation }) => {
                     />
                   )}
                 />
-                <Text
-                  h8
-                  style={{
-                    marginTop: 5,
-                    marginBottom: -15,
-                    color: "#CC0000",
-                  }}
-                >
-                  Nota: Para seleccionar una fecha, presionar el botón aceptar.
-                </Text>
+
                 <View row spread>
                   <Controller
                     control={control}

@@ -18,6 +18,7 @@ import translateMessage from "../utils/translateMessage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
+import { db } from "../utils/firebase";
 
 const ReviewSchema = yup.object().shape({
   email: yup
@@ -31,31 +32,59 @@ const RecoverPasswordScreen = ({ navigation }) => {
   const { sendPasswordResetEmail } = useAuth();
   const addToast = useToast();
   const [loading, setLoading] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState(true);
   const { handleSubmit, errors, control } = useForm({
     resolver: yupResolver(ReviewSchema),
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
     setLoading(true);
-    try {
-      await sendPasswordResetEmail(data.email);
-      addToast({
-        backgroundColor: "green",
-        message:
-          "Se ha enviado un correo a " +
-          data.email +
-          " que te permitirá restablecer tu contraseña. Revisa tu bandeja de entrada.",
+    await db
+      .collection("users")
+      .where("email", "==", data.email)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach(async (doc) => {
+          if (doc.data().role === "ROLE_WHISTLEBLOWER") {
+            try {
+              await sendPasswordResetEmail(data.email);
+              addToast({
+                backgroundColor: "green",
+                message:
+                  "Se ha enviado un correo a " +
+                  data.email +
+                  " que te permitirá restablecer tu contraseña. Revisa tu bandeja de entrada.",
+              });
+              setLoading(false);
+              navigation.navigate("LoginScreen");
+              return true;
+            } catch (error) {
+              addToast({
+                backgroundColor: "#CC0000",
+                message: translateMessage(error.code),
+              });
+              setLoading(false);
+              navigation.navigate("LoginScreen");
+              return true;
+            }
+          } else {
+            addToast({
+              backgroundColor: "#CC0000",
+              message:
+                "Solo pueden recuperar contraseña los usuarios denunciantes.",
+            });
+            setLoading(false);
+            navigation.navigate("LoginScreen");
+            return true;
+          }
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
       });
-      setLoading(false);
-      navigation.navigate("LoginScreen");
-    } catch (error) {
-      addToast({
-        backgroundColor: "#CC0000",
-        message: translateMessage(error.code),
-      });
-      setLoading(false);
-    }
+
+    setLoading(false);
+    return true;
   };
 
   return (
