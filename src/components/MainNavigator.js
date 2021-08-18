@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HomeScreen from "../screens/HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Text, Button, View } from "react-native-ui-lib";
+import { Text, Button, View, Dialog } from "react-native-ui-lib";
 import Icon from "react-native-vector-icons/FontAwesome";
 import {
   createDrawerNavigator,
@@ -110,6 +110,7 @@ const MainStackNavigator = ({ navigation }) => {
 
 const CustomDrawerContent = ({ ...props }) => {
   const { logout } = useAuth();
+  const [visibleModal, setVisibleModal] = useState(false);
   return (
     <DrawerContentScrollView
       {...props}
@@ -135,7 +136,9 @@ const CustomDrawerContent = ({ ...props }) => {
           style={{
             alignSelf: "center",
           }}
-          onPress={logout}
+          onPress={() => {
+            setVisibleModal(true);
+          }}
           labelStyle={{
             fontWeight: "bold",
             fontSize: 20,
@@ -147,6 +150,57 @@ const CustomDrawerContent = ({ ...props }) => {
           link
         />
       </View>
+      <Dialog
+        migrate
+        useSafeArea
+        containerStyle={{
+          backgroundColor: "white",
+          paddingTop: 30,
+          paddingBottom: 30,
+          paddingRight: 20,
+          paddingLeft: 20,
+          marginLeft: 10,
+          marginRight: 10,
+        }}
+        visible={visibleModal}
+        onRequestClose={() => {
+          setVisibleModal(false);
+        }}
+        onDismiss={() => {
+          setVisibleModal(false);
+        }}
+      >
+        <Text h5>¿Desea cerrar sesión?</Text>
+        <View spread row marginT-25 marginH-20>
+          <Button
+            label="No"
+            style={{
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              setVisibleModal(false);
+            }}
+            labelStyle={{
+              fontWeight: "bold",
+              fontSize: 20,
+              color: "white",
+            }}
+          />
+          <Button
+            label="Sí"
+            style={{
+              alignSelf: "center",
+              backgroundColor: "#E07A5F",
+            }}
+            onPress={logout}
+            labelStyle={{
+              fontWeight: "bold",
+              fontSize: 20,
+              color: "white",
+            }}
+          />
+        </View>
+      </Dialog>
     </DrawerContentScrollView>
   );
 };

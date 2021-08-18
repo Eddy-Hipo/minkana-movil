@@ -30,19 +30,38 @@ import { db } from "../utils/firebase";
 import Loading from "../components/Loading";
 
 const schema = yup.object().shape({
-  title: yup.string().required("Ingrese un título a su denuncia."),
-  description: yup.string().required("Ingrese una descripción a su denuncia."),
+  title: yup.string().required("Ingrese un título a su denuncia"),
+  description: yup.string().required("Ingrese una descripción a su denuncia"),
   incidentLocation: yup
     .string()
-    .required("Ingrese el lugar en específico del abuso."),
-  incidentDate: yup.number().required("Ingrese la fecha del suceso."),
-  type: yup.string().required("Escoja el tipo de acoso experimentado."),
+    .required("Ingrese el lugar en específico del abuso"),
+  incidentDate: yup.number().required("Ingrese la fecha del suceso"),
+  type: yup.string().required("Escoja el tipo de acoso experimentado"),
   iesOccurred: yup.string().required("Selecciona una universidad"),
+});
+
+const schema2 = yup.object().shape({
+  title: yup.string().required("Ingrese un título a su denuncia"),
+  description: yup.string().required("Ingrese una descripción a su denuncia"),
+  incidentLocation: yup
+    .string()
+    .required("Ingrese el lugar en específico del abuso"),
+  incidentDate: yup.number().required("Ingrese la fecha del suceso"),
+  type: yup.string().required("Escoja el tipo de acoso experimentado"),
+  iesOccurred: yup.string().required("Selecciona una universidad"),
+  anotherType: yup.string().required("Especifique un tipo de acoso"),
 });
 
 const ReportScreen = ({ navigation }) => {
   const { control, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
+  });
+  const {
+    control: control2,
+    handleSubmit: handleSubmit2,
+    errors: errors2,
+  } = useForm({
+    resolver: yupResolver(schema2),
   });
   const [loading, setLoading] = useState(false);
   const addToast = useToast();
@@ -51,6 +70,7 @@ const ReportScreen = ({ navigation }) => {
   const [uriImage, setUriImage] = useState("");
   const [selectedValueIes, setSelectedValueIes] = useState(user.ies);
   const [selectedValueType, setSelectedValueType] = useState("");
+  const [valueOtros, setvalueOtros] = useState(false);
 
   const handleImage = async () => {
     setLoading(true);
@@ -82,6 +102,7 @@ const ReportScreen = ({ navigation }) => {
   };
 
   const onCreate = async (data) => {
+    console.log("datos crearte: ", data);
     setLoading(true);
     try {
       let dataTotal = {};
@@ -121,13 +142,11 @@ const ReportScreen = ({ navigation }) => {
           photoURL: resultUploadImage.url,
         };
       }
-      //let idRef;
+
       await db
         .collection("reports")
         .add({ ...dataTotal })
         .then(async (docRef) => {
-          //console.log("Document written with ID: ", docRef.id);
-          //idRef = docRef.id;
           await db
             .collection("reports")
             .doc(docRef.id)
@@ -170,7 +189,7 @@ const ReportScreen = ({ navigation }) => {
               <Text h1>Ingrese su denuncia</Text>
               <Text h6>Título</Text>
               <Controller
-                control={control}
+                control={valueOtros ? control2 : control}
                 name="title"
                 defaultValue=""
                 render={(props) => (
@@ -181,8 +200,12 @@ const ReportScreen = ({ navigation }) => {
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
                     returnKeyType={"go"}
-                    error={errors.title?.message}
-                    enableErrors={!!errors.title}
+                    error={
+                      valueOtros
+                        ? errors2.title?.message
+                        : errors.title?.message
+                    }
+                    enableErrors={valueOtros ? !!errors2.title : !!errors.title}
                   />
                 )}
               />
@@ -191,7 +214,7 @@ const ReportScreen = ({ navigation }) => {
                 Descripción de la denuncia
               </Text>
               <Controller
-                control={control}
+                control={valueOtros ? control2 : control}
                 name="description"
                 defaultValue=""
                 render={(props) => (
@@ -202,8 +225,14 @@ const ReportScreen = ({ navigation }) => {
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
                     returnKeyType={"go"}
-                    error={errors.description?.message}
-                    enableErrors={!!errors.description}
+                    error={
+                      valueOtros
+                        ? errors2.description?.message
+                        : errors.description?.message
+                    }
+                    enableErrors={
+                      valueOtros ? !!errors2.description : !!errors.description
+                    }
                   />
                 )}
               />
@@ -215,22 +244,31 @@ const ReportScreen = ({ navigation }) => {
                 h8
                 style={{
                   marginTop: 1,
-                  marginBottom: -5,
+                  marginBottom: -12,
                   color: "#CC0000",
                 }}
               >
-                Nota: Para seleccionar una fecha, presionar el botón aceptar.
+                Nota: Al momento de seleccionar una fecha, presionar el botón
+                aceptar.
               </Text>
               <Controller
-                control={control}
+                control={valueOtros ? control2 : control}
                 name="incidentDate"
                 defaultValue={undefined}
                 render={(props) => (
                   <DateTimePicker
                     onBackgroundPress={false}
                     display="default"
-                    error={errors.incidentDate?.message}
-                    enableErrors={!!errors.incidentDate}
+                    error={
+                      valueOtros
+                        ? errors2.incidentDate?.message
+                        : errors.incidentDate?.message
+                    }
+                    enableErrors={
+                      valueOtros
+                        ? !!errors2.incidentDate
+                        : !!errors.incidentDate
+                    }
                     placeholder={"Seleccione la fecha del suceso"}
                     minimumDate={
                       new Date(
@@ -254,7 +292,7 @@ const ReportScreen = ({ navigation }) => {
               </Text>
               <Controller
                 name="type"
-                control={control}
+                control={valueOtros ? control2 : control}
                 defaultValue=""
                 render={(props) => (
                   <Picker
@@ -271,11 +309,18 @@ const ReportScreen = ({ navigation }) => {
                     }}
                     placeholder="Escoja el tipo de acoso"
                     value={selectedValueType}
-                    error={errors.type?.message}
-                    enableErrors={!!errors.type}
+                    error={
+                      valueOtros ? errors2.type?.message : errors.type?.message
+                    }
+                    enableErrors={valueOtros ? !!errors2.type : !!errors.type}
                     onChange={(value) => {
                       props.onChange(value.value);
                       setSelectedValueType(value.value);
+                      if (value.value === "Otro") {
+                        setvalueOtros(true);
+                      } else {
+                        setvalueOtros(false);
+                      }
                     }}
                   >
                     <Picker.Item label="Físico" value="Físico" />
@@ -283,16 +328,41 @@ const ReportScreen = ({ navigation }) => {
                     <Picker.Item label="Verbal" value="Verbal" />
                     <Picker.Item label="Escrito" value="Escrito" />
                     <Picker.Item label="Visual" value="Visual" />
+                    <Picker.Item label="Otro" value="Otro" />
                   </Picker>
                 )}
               />
+              {valueOtros ? (
+                <>
+                  <Text marginT-10 h6>
+                    Especifique el acoso
+                  </Text>
+                  <Controller
+                    control={valueOtros ? control2 : control}
+                    name="anotherType"
+                    defaultValue=""
+                    render={(props) => (
+                      <TextField
+                        style={styles.textFileReport}
+                        placeholder="Especifique el acoso"
+                        autoCapitalize="sentences"
+                        autoCorrect={false}
+                        onChangeText={(value) => props.onChange(value)}
+                        returnKeyType={"go"}
+                        error={errors2.anotherType?.message}
+                        enableErrors={!!errors2.anotherType}
+                      />
+                    )}
+                  />
+                </>
+              ) : null}
 
               <Text h6 style={{ marginTop: 15 }}>
                 IES donde ocurrio
               </Text>
               <Controller
                 name="iesOccurred"
-                control={control}
+                control={valueOtros ? control2 : control}
                 defaultValue={user.ies}
                 render={(props) => (
                   <Picker
@@ -307,8 +377,14 @@ const ReportScreen = ({ navigation }) => {
                     }}
                     placeholder="Escoje tu universidad"
                     value={selectedValueIes}
-                    error={errors.iesOccurred?.message}
-                    enableErrors={!!errors.iesOccurred}
+                    error={
+                      valueOtros
+                        ? errors2.iesOccurred?.message
+                        : errors.iesOccurred?.message
+                    }
+                    enableErrors={
+                      valueOtros ? !!errors2.iesOccurred : !!errors.iesOccurred
+                    }
                     onChange={(value) => {
                       props.onChange(value.value);
                       setSelectedValueIes(value.value);
@@ -367,7 +443,7 @@ const ReportScreen = ({ navigation }) => {
                 Lugar dentro de la IES
               </Text>
               <Controller
-                control={control}
+                control={valueOtros ? control2 : control}
                 name="incidentLocation"
                 defaultValue=""
                 render={(props) => (
@@ -377,14 +453,22 @@ const ReportScreen = ({ navigation }) => {
                     autoCapitalize="sentences"
                     autoCorrect={false}
                     onChangeText={(value) => props.onChange(value)}
-                    error={errors.incidentLocation?.message}
-                    enableErrors={!!errors.incidentLocation}
+                    error={
+                      valueOtros
+                        ? errors2.incidentLocation?.message
+                        : errors.incidentLocation?.message
+                    }
+                    enableErrors={
+                      valueOtros
+                        ? !!errors2.incidentLocation
+                        : !!errors.incidentLocation
+                    }
                   />
                 )}
               />
 
               <Text h6 style={{ marginTop: 15, marginBottom: 10 }}>
-                Adjunta una prueba (Opcional)
+                Adjunta una imagen (Opcional)
               </Text>
               <View marginH-15>
                 {resultImage ? (
@@ -421,7 +505,9 @@ const ReportScreen = ({ navigation }) => {
                   padding: 5,
                 }}
                 enableShadow
-                onPress={handleSubmit(onCreate)}
+                onPress={
+                  valueOtros ? handleSubmit2(onCreate) : handleSubmit(onCreate)
+                }
                 style={{
                   backgroundColor: "#E07A5F",
                   marginLeft: 50,
