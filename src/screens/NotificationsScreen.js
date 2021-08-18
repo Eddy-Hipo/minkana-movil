@@ -195,7 +195,7 @@ const NotificationScreen = () => {
                           </View>
                         </View>
 
-                        <View spread row>
+                        <View margin-15 spread row>
                           <Button
                             label="VER MÁS"
                             labelStyle={{ fontSize: 14, fontWeight: "bold" }}
@@ -205,83 +205,69 @@ const NotificationScreen = () => {
                               item.veracity !== undefined
                                 ? {
                                     backgroundColor: "#3D405B",
-                                    width: 107,
                                     height: 40,
                                     borderRadius: 15,
-                                    marginLeft: 15,
-                                    marginTop: 32,
                                   }
                                 : {
                                     backgroundColor: "#3D405B",
-                                    width: 107,
                                     height: 40,
                                     borderRadius: 15,
-                                    marginLeft: 15,
-                                    marginTop: 15,
-                                    marginBottom: 15,
                                   }
                             }
                           />
-                          {item.veracity !== undefined ? (
+
+                          {item.status === "En proceso" ? (
+                            <View
+                              style={{
+                                backgroundColor: "#E07A5F",
+                                height: 40,
+                                padding: 9,
+                                borderRadius: 8.5,
+                              }}
+                            >
+                              <Text h6 white style={{ fontWeight: "bold" }}>
+                                En proceso
+                              </Text>
+                            </View>
+                          ) : item.status === "Pendiente" ? (
+                            <View
+                              style={{
+                                backgroundColor: "#C384D2",
+                                height: 40,
+                                padding: 9,
+                                borderRadius: 8.5,
+                              }}
+                            >
+                              <Text h6 white style={{ fontWeight: "bold" }}>
+                                Pendiente
+                              </Text>
+                            </View>
+                          ) : item.veracity !== undefined ? (
                             item.veracity ? (
                               <View
-                                marginB-10
                                 style={{
-                                  right: 25,
+                                  backgroundColor: "#42AE27",
+                                  height: 40,
+                                  padding: 9,
+                                  borderRadius: 8.5,
                                 }}
                               >
-                                <View margin-5>
-                                  <Text
-                                    center
-                                    h7
-                                    style={{ fontWeight: "bold" }}
-                                  >
-                                    Estado
-                                  </Text>
-                                </View>
-                                <View
-                                  style={{
-                                    backgroundColor: "#42AE27",
-                                    width: 100,
-                                    height: 40,
-                                    padding: 8,
-                                    borderRadius: 8.5,
-                                  }}
-                                >
-                                  <Text h6 white style={{ fontWeight: "bold" }}>
-                                    Aceptado
-                                  </Text>
-                                </View>
+                                <Text h6 white style={{ fontWeight: "bold" }}>
+                                  Aceptada
+                                </Text>
                               </View>
                             ) : (
                               <View
-                                marginB-10
                                 style={{
-                                  right: 20,
+                                  backgroundColor: "red",
+                                  height: 40,
+                                  padding: 9,
+                                  borderRadius: 8.5,
                                 }}
                               >
-                                <View margin-5>
-                                  <Text
-                                    center
-                                    h7
-                                    style={{ fontWeight: "bold" }}
-                                  >
-                                    Estado
-                                  </Text>
-                                </View>
-                                <View
-                                  style={{
-                                    backgroundColor: "red",
-                                    width: 115,
-                                    height: 40,
-                                    padding: 8,
-                                    borderRadius: 8.5,
-                                  }}
-                                >
-                                  <Text h6 white style={{ fontWeight: "bold" }}>
-                                    Rechazado
-                                  </Text>
-                                </View>
+                                <Text h6 white style={{ fontWeight: "bold" }}>
+                                  Rechazada
+                                </Text>
                               </View>
                             )
                           ) : null}
@@ -302,7 +288,6 @@ const NotificationScreen = () => {
                 return (
                   <View key={item.id}>
                     <View
-                      key={item.id}
                       style={{
                         backgroundColor: "white",
                         borderRadius: 8.5,
@@ -358,7 +343,7 @@ const NotificationScreen = () => {
                         </View>
                       </View>
 
-                      <View spread row>
+                      <View margin-15 spread row>
                         <Button
                           label="VER MÁS"
                           labelStyle={{ fontSize: 14, fontWeight: "bold" }}
@@ -368,75 +353,69 @@ const NotificationScreen = () => {
                             item.veracity !== undefined
                               ? {
                                   backgroundColor: "#3D405B",
-                                  width: 107,
                                   height: 40,
                                   borderRadius: 15,
-                                  marginLeft: 15,
-                                  marginTop: 32,
                                 }
                               : {
                                   backgroundColor: "#3D405B",
-                                  width: 107,
                                   height: 40,
                                   borderRadius: 15,
-                                  marginLeft: 15,
-                                  marginTop: 15,
-                                  marginBottom: 15,
                                 }
                           }
                         />
-                        {item.veracity !== undefined ? (
+
+                        {item.status === "En proceso" ? (
+                          <View
+                            style={{
+                              backgroundColor: "#E07A5F",
+                              height: 40,
+                              padding: 9,
+                              borderRadius: 8.5,
+                            }}
+                          >
+                            <Text h6 white style={{ fontWeight: "bold" }}>
+                              En proceso
+                            </Text>
+                          </View>
+                        ) : item.status === "Pendiente" ? (
+                          <View
+                            style={{
+                              backgroundColor: "#C384D2",
+                              height: 40,
+                              padding: 9,
+                              borderRadius: 8.5,
+                            }}
+                          >
+                            <Text h6 white style={{ fontWeight: "bold" }}>
+                              Pendiente
+                            </Text>
+                          </View>
+                        ) : item.veracity !== undefined ? (
                           item.veracity ? (
                             <View
-                              marginB-10
                               style={{
-                                right: 25,
+                                backgroundColor: "#42AE27",
+                                height: 40,
+                                padding: 9,
+                                borderRadius: 8.5,
                               }}
                             >
-                              <View margin-5>
-                                <Text center h7 style={{ fontWeight: "bold" }}>
-                                  Estado
-                                </Text>
-                              </View>
-                              <View
-                                style={{
-                                  backgroundColor: "#42AE27",
-                                  width: 100,
-                                  height: 40,
-                                  padding: 8,
-                                  borderRadius: 8.5,
-                                }}
-                              >
-                                <Text h6 white style={{ fontWeight: "bold" }}>
-                                  Aceptado
-                                </Text>
-                              </View>
+                              <Text h6 white style={{ fontWeight: "bold" }}>
+                                Aceptada
+                              </Text>
                             </View>
                           ) : (
                             <View
-                              marginB-10
                               style={{
-                                right: 20,
+                                backgroundColor: "red",
+                                height: 40,
+                                padding: 9,
+                                borderRadius: 8.5,
                               }}
                             >
-                              <View margin-5>
-                                <Text center h7 style={{ fontWeight: "bold" }}>
-                                  Estado
-                                </Text>
-                              </View>
-                              <View
-                                style={{
-                                  backgroundColor: "red",
-                                  width: 115,
-                                  height: 40,
-                                  padding: 8,
-                                  borderRadius: 8.5,
-                                }}
-                              >
-                                <Text h6 white style={{ fontWeight: "bold" }}>
-                                  Rechazado
-                                </Text>
-                              </View>
+                              <Text h6 white style={{ fontWeight: "bold" }}>
+                                Rechazada
+                              </Text>
                             </View>
                           )
                         ) : null}

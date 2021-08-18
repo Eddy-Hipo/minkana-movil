@@ -91,6 +91,8 @@ function useAuthProvider() {
             uid: userCredential.user.uid,
             role: "ROLE_WHISTLEBLOWER",
             account: "Habilitada",
+            photoProfile:
+              "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/profile%2FDefaultPhotoProfile.jpg?alt=media&token=8008e83d-ce03-4812-8c61-0f6c60803d52",
           });
         });
       return true;

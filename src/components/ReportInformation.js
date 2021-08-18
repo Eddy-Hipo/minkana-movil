@@ -79,22 +79,66 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
               {AttendedBy.data ? (
                 <View spred row>
                   <View style={{ width: "40%" }}>
-                    <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
-                      Atendido por
-                    </Text>
+                    {Report.status !== "En proceso" ? (
+                      <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                        Atendido por
+                      </Text>
+                    ) : (
+                      <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                        Aceptado por
+                      </Text>
+                    )}
+
                     <Text h7 style={{ marginBottom: 20 }}>
                       {AttendedBy.name} {AttendedBy.lastname}
                     </Text>
                   </View>
                   <View style={{ width: "60%" }}>
-                    <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
-                      Fecha de atención
-                    </Text>
-                    <Text h7 style={{ marginBottom: 20 }}>
-                      {moment(Report.resolutionDate).format("YYYY-MM-DD")}
-                    </Text>
+                    {Report.status !== "En proceso" ? (
+                      <>
+                        <Text
+                          h5
+                          style={{ fontWeight: "bold", marginBottom: 5 }}
+                        >
+                          Fecha de atención
+                        </Text>
+                        <Text h7 style={{ marginBottom: 20 }}>
+                          {moment(Report.resolutionDate).format("YYYY-MM-DD")}
+                        </Text>
+                      </>
+                    ) : null}
                   </View>
                 </View>
+              ) : null}
+              <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                Tipo de acoso
+              </Text>
+              <Text
+                h7
+                style={{
+                  marginBottom: 20,
+                  lineHeight: 24,
+                  textAlign: "justify",
+                }}
+              >
+                {Report.type}
+              </Text>
+              {Report.type === "Otro" ? (
+                <>
+                  <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
+                    Acoso en específico
+                  </Text>
+                  <Text
+                    h7
+                    style={{
+                      marginBottom: 20,
+                      lineHeight: 24,
+                      textAlign: "justify",
+                    }}
+                  >
+                    {Report.anotherType}
+                  </Text>
+                </>
               ) : null}
               <Text h5 style={{ fontWeight: "bold", marginBottom: 5 }}>
                 IES donde ocurrio el suceso
@@ -135,41 +179,61 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
               >
                 {Report.description}
               </Text>
-              {Report.veracity !== undefined ? (
-                <View>
-                  {Report.veracity ? (
-                    <Text h5 style={{ fontWeight: "bold", marginBottom: 20 }}>
-                      Denuncia Aceptada
-                    </Text>
-                  ) : (
-                    <View>
-                      <Text h5 style={{ fontWeight: "bold", marginBottom: 20 }}>
-                        Denuncia Rechazada
-                      </Text>
+              {Report.status !== "En proceso" ? (
+                Report.veracity !== undefined ? (
+                  <View>
+                    {Report.veracity ? (
+                      <>
+                        <Text
+                          h5
+                          style={{ fontWeight: "bold", marginBottom: 5 }}
+                        >
+                          Denuncia
+                        </Text>
+                        <Text
+                          h7
+                          style={{
+                            marginBottom: 20,
+                            lineHeight: 24,
+                            textAlign: "justify",
+                          }}
+                        >
+                          Atendida - Aceptada
+                        </Text>
+                      </>
+                    ) : (
+                      <View>
+                        <Text
+                          h5
+                          style={{ fontWeight: "bold", marginBottom: 20 }}
+                        >
+                          Denuncia Rechazada
+                        </Text>
 
-                      {Report.rejectionReason !== undefined ? (
-                        <View>
-                          <Text
-                            h5
-                            style={{ fontWeight: "bold", marginBottom: 5 }}
-                          >
-                            Razón
-                          </Text>
-                          <Text
-                            h7
-                            style={{
-                              marginBottom: 20,
-                              lineHeight: 24,
-                              textAlign: "justify",
-                            }}
-                          >
-                            {Report.rejectionReason}
-                          </Text>
-                        </View>
-                      ) : null}
-                    </View>
-                  )}
-                </View>
+                        {Report.rejectionReason !== undefined ? (
+                          <View>
+                            <Text
+                              h5
+                              style={{ fontWeight: "bold", marginBottom: 5 }}
+                            >
+                              Razón
+                            </Text>
+                            <Text
+                              h7
+                              style={{
+                                marginBottom: 20,
+                                lineHeight: 24,
+                                textAlign: "justify",
+                              }}
+                            >
+                              {Report.rejectionReason}
+                            </Text>
+                          </View>
+                        ) : null}
+                      </View>
+                    )}
+                  </View>
+                ) : null
               ) : null}
             </View>
           </ScrollView>

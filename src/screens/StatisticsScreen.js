@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, DateTimePicker, Button } from "react-native-ui-lib";
+import { Text, View, DateTimePicker, Button, Image } from "react-native-ui-lib";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -140,6 +140,17 @@ const StatisticsScreen = () => {
         <View style={{ height: "99%", marginBottom: 5, marginTop: 2 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View marginH-7>
+              <Text
+                h8
+                style={{
+                  marginTop: 5,
+                  marginBottom: -5,
+                  color: "#CC0000",
+                }}
+              >
+                Nota: Al momento de seleccionar una fecha, presionar el botón
+                aceptar.
+              </Text>
               <View
                 marginT-5
                 marginH-10
@@ -149,6 +160,7 @@ const StatisticsScreen = () => {
                 <Text style={{ flex: 0.55, fontWeight: "bold" }}>Inicio</Text>
                 <Text style={{ flex: 0.45, fontWeight: "bold" }}>Fin</Text>
               </View>
+
               <View spread row>
                 <DateTimePicker
                   value={new Date(moment(initialDate).format("YYYY-MM-DD"))}
@@ -158,7 +170,7 @@ const StatisticsScreen = () => {
                   }
                   maximumDate={
                     new Date(
-                      moment(finalDate).subtract(7, "days").format("YYYY-MM-DD")
+                      moment(finalDate).subtract(1, "days").format("YYYY-MM-DD")
                     )
                   }
                   dateFormat={"YYYY-MM-DD"}
@@ -174,7 +186,7 @@ const StatisticsScreen = () => {
                   style={styles.textFileRegister}
                   minimumDate={
                     new Date(
-                      moment(initialDate).add(7, "days").format("YYYY-MM-DD")
+                      moment(initialDate).add(1, "days").format("YYYY-MM-DD")
                     )
                   }
                   maximumDate={
@@ -190,14 +202,14 @@ const StatisticsScreen = () => {
                 />
               </View>
               <Button
-                label="Aceptar"
+                label="Buscar"
                 labelStyle={{ fontSize: 15, padding: 3 }}
                 enableShadow
                 onPress={handleAcceptDates}
                 style={{
                   backgroundColor: "#3D405B",
-                  marginLeft: 70,
-                  marginRight: 70,
+                  marginLeft: 100,
+                  marginRight: 100,
                   marginTop: -10,
                   marginBottom: 20,
                 }}
@@ -271,11 +283,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Escuela Politécnica Nacional (EPN)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[0]}</Text>
                   <Button
                     label="Ver Más"
@@ -301,11 +313,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad Central del Ecuador (UCE)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[1]}</Text>
                   <Button
                     label="Ver Más"
@@ -331,11 +343,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Pontificia Universidad Católica del Ecuador (PUCE)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[2]}</Text>
                   <Button
                     label="Ver Más"
@@ -361,11 +373,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Escuela Politécnica del Ejército (ESPE)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[3]}</Text>
                   <Button
                     label="Ver Más"
@@ -391,12 +403,12 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad Politécnica Salesiana (UPS)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{numReports2[5]}</Text>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
+                  <Text marginT-8>{numReports2[4]}</Text>
                   <Button
                     label="Ver Más"
                     labelStyle={{ fontSize: 14 }}
@@ -421,41 +433,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
-                  Universidad Internacional del Ecuador (UIDE)
-                </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
-                  <Text marginT-8>{numReports2[10]}</Text>
-                  <Button
-                    label="Ver Más"
-                    labelStyle={{ fontSize: 14 }}
-                    enableShadow
-                    onPress={() => {
-                      setReportDataIesSearchModal(
-                        "Universidad Internacional del Ecuador"
-                      );
-                      handleOpenModalReport();
-                    }}
-                    style={{
-                      backgroundColor: "#3D405B",
-                      width: 97,
-                      height: 45,
-                      borderRadius: 20,
-                      marginLeft: 15,
-                      marginRight: 35,
-                      padding: 0,
-                    }}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad San Francisco de Quito (USFQ)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[5]}</Text>
                   <Button
                     label="Ver Más"
@@ -481,11 +463,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad de las Américas (UDLA)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[6]}</Text>
                   <Button
                     label="Ver Más"
@@ -511,11 +493,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad Andina Simón Bolívar (UASB)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[7]}</Text>
                   <Button
                     label="Ver Más"
@@ -541,11 +523,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Universidad Tecnológica Equinoccial (UTE)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[8]}</Text>
                   <Button
                     label="Ver Más"
@@ -571,11 +553,11 @@ const StatisticsScreen = () => {
               </View>
 
               <View style={styles.ViewBorder} marginT-15 row>
-                <Text style={{ flex: 0.68 }}>
+                <Text style={{ flex: 0.65 }}>
                   Escuela Superior Politécnica del Litoral (ESPOL)
                 </Text>
-                <Text style={{ flex: 0.02 }} />
-                <View style={{ flex: 0.3 }} marginR-10 row>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
                   <Text marginT-8>{numReports2[9]}</Text>
                   <Button
                     label="Ver Más"
@@ -584,6 +566,35 @@ const StatisticsScreen = () => {
                     onPress={() => {
                       setReportDataIesSearchModal(
                         "Escuela Sup. Politécnica del Litoral"
+                      );
+                      handleOpenModalReport();
+                    }}
+                    style={{
+                      backgroundColor: "#3D405B",
+                      width: 97,
+                      height: 45,
+                      borderRadius: 20,
+                      marginLeft: 15,
+                      marginRight: 35,
+                      padding: 0,
+                    }}
+                  />
+                </View>
+              </View>
+              <View style={styles.ViewBorder} marginT-15 row>
+                <Text style={{ flex: 0.65 }}>
+                  Universidad Internacional del Ecuador (UIDE)
+                </Text>
+                <Text style={{ flex: 0.04 }} />
+                <View style={{ flex: 0.3 }} marginR-15 row>
+                  <Text marginT-8>{numReports2[10]}</Text>
+                  <Button
+                    label="Ver Más"
+                    labelStyle={{ fontSize: 14 }}
+                    enableShadow
+                    onPress={() => {
+                      setReportDataIesSearchModal(
+                        "Universidad Internacional del Ecuador"
                       );
                       handleOpenModalReport();
                     }}

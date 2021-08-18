@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import {
   Button,
   Text,
@@ -100,65 +105,101 @@ const RegisterScreen = ({ navigation }) => {
             behavior={Platform.OS === "ios" ? "position" : "height"}
           >
             <View>
-              <View>
-                <Text h1>Crear una cuenta</Text>
-                <View row spread>
-                  <Controller
-                    control={control}
-                    name="name"
-                    defaultValue=""
-                    render={(props) => (
-                      <TextField
-                        style={styles.textFileRegister}
-                        placeholder="Nombre"
-                        autoCapitalize="words"
-                        autoCorrect={false}
-                        onChangeText={(value) => props.onChange(value)}
-                        returnKeyType="go"
-                        error={errors.name?.message}
-                        enableErrors={!!errors.name}
-                      />
-                    )}
-                  />
-                  <Controller
-                    control={control}
-                    name="lastname"
-                    defaultValue=""
-                    render={(props) => (
-                      <TextField
-                        style={styles.textFileRegister}
-                        placeholder="Apellido"
-                        autoCapitalize="words"
-                        autoCorrect={false}
-                        onChangeText={(value) => props.onChange(value)}
-                        returnKeyType="go"
-                        error={errors.lastname?.message}
-                        enableErrors={!!errors.lastname}
-                      />
-                    )}
-                  />
-                </View>
-                <Controller
-                  control={control}
-                  name="email"
-                  defaultValue=""
-                  render={(props) => (
-                    <TextField
-                      placeholder="Correo electrónico"
-                      autoCapitalize={"none"}
-                      autoCorrect={false}
-                      textContentType={"emailAddress"}
-                      autoCompleteType={"email"}
-                      onChangeText={(value) => props.onChange(value)}
-                      keyboardType={"email-address"}
-                      returnKeyType="go"
-                      error={errors.email?.message}
-                      enableErrors={!!errors.email}
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <View>
+                  <Text h1>Crear una cuenta</Text>
+                  <View style={{ marginBottom: -15, marginTop: -5 }} spread row>
+                    <Text style={{ flex: 0.53 }} h6>
+                      Nombre
+                    </Text>
+                    <Text style={{ flex: 0.47 }} h6>
+                      Apellido
+                    </Text>
+                  </View>
+                  <View row spread>
+                    <Controller
+                      control={control}
+                      name="name"
+                      defaultValue=""
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFileRegister}
+                          placeholder="Nombre"
+                          autoCapitalize="words"
+                          autoCorrect={false}
+                          onChangeText={(value) => props.onChange(value)}
+                          returnKeyType="go"
+                          error={errors.name?.message}
+                          enableErrors={!!errors.name}
+                        />
+                      )}
                     />
-                  )}
-                />
+                    <Controller
+                      control={control}
+                      name="lastname"
+                      defaultValue=""
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFileRegister}
+                          placeholder="Apellido"
+                          autoCapitalize="words"
+                          autoCorrect={false}
+                          onChangeText={(value) => props.onChange(value)}
+                          returnKeyType="go"
+                          error={errors.lastname?.message}
+                          enableErrors={!!errors.lastname}
+                        />
+                      )}
+                    />
+                  </View>
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                      marginBottom: -15,
+                    }}
+                  >
+                    Correo electrónico
+                  </Text>
+                  <Controller
+                    control={control}
+                    name="email"
+                    defaultValue=""
+                    render={(props) => (
+                      <TextField
+                        placeholder="Correo electrónico"
+                        autoCapitalize={"none"}
+                        autoCorrect={false}
+                        textContentType={"emailAddress"}
+                        autoCompleteType={"email"}
+                        onChangeText={(value) => props.onChange(value)}
+                        keyboardType={"email-address"}
+                        returnKeyType="go"
+                        error={errors.email?.message}
+                        enableErrors={!!errors.email}
+                      />
+                    )}
+                  />
 
-                <View row spread>
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                    }}
+                  >
+                    Fecha de nacimiento
+                  </Text>
+                  <Text
+                    h8
+                    style={{
+                      marginTop: -5,
+                      marginBottom: -13,
+                      color: "#CC0000",
+                    }}
+                  >
+                    Nota: Al momento de seleccionar una fecha, presionar el
+                    botón aceptar.
+                  </Text>
                   <Controller
                     control={control}
                     name="birthdate"
@@ -168,7 +209,7 @@ const RegisterScreen = ({ navigation }) => {
                         style={styles.textFileRegister}
                         error={errors.birthdate?.message}
                         enableErrors={!!errors.birthdate}
-                        placeholder={"Fecha nacimiento"}
+                        placeholder={"Fecha de nacimiento"}
                         minimumDate={
                           new Date(
                             moment().subtract(70, "years").format("YYYY-MM-DD")
@@ -188,6 +229,15 @@ const RegisterScreen = ({ navigation }) => {
                     )}
                   />
 
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                      marginBottom: -15,
+                    }}
+                  >
+                    Género
+                  </Text>
                   <Controller
                     name="gender"
                     control={control}
@@ -196,7 +246,15 @@ const RegisterScreen = ({ navigation }) => {
                       <Picker
                         enableModalBlur={false}
                         topBarProps={{ title: "Géneros" }}
-                        style={styles.textFileRegister}
+                        style={{
+                          marginTop: 15,
+                          height: 45,
+                          paddingHorizontal: 15,
+                          borderColor: "#E8E8E8",
+                          borderWidth: 1,
+                          backgroundColor: "#F6F6F6",
+                          borderRadius: 5,
+                        }}
                         placeholder="Escoje tu género"
                         value={selectedValueGender}
                         error={errors.gender?.message}
@@ -212,187 +270,213 @@ const RegisterScreen = ({ navigation }) => {
                       </Picker>
                     )}
                   />
-                </View>
-
-                <Controller
-                  name="ies"
-                  control={control}
-                  defaultValue=""
-                  render={(props) => (
-                    <Picker
-                      enableModalBlur={false}
-                      topBarProps={{ title: "Universidades" }}
-                      style={{
-                        marginTop: 15,
-                        height: 45,
-                        paddingHorizontal: 15,
-                        borderColor: "#E8E8E8",
-                        borderWidth: 1,
-                        backgroundColor: "#F6F6F6",
-                        borderRadius: 5,
-                      }}
-                      showSearch
-                      searchPlaceholder={"Busca tu universidad"}
-                      searchStyle={{
-                        color: "black",
-                        placeholderTextColor: "black",
-                      }}
-                      placeholder="Escoje tu universidad"
-                      value={selectedValueIes}
-                      error={errors.ies?.message}
-                      enableErrors={!!errors.ies}
-                      onChange={(value) => {
-                        props.onChange(value.value);
-                        setSelectedValueIes(value.value);
-                      }}
-                    >
-                      <Picker.Item
-                        label="Escuela Politécnica Nacional (EPN)"
-                        value="Escuela Politécnica Nacional"
-                      />
-                      <Picker.Item
-                        label="Universidad Central del Ecuador (UCE)"
-                        value="Universidad Central del Ecuador"
-                      />
-                      <Picker.Item
-                        label="Pontificia Uni. Católica del Ecuador (PUCE)"
-                        value="Pontificia Uni. Católica del Ecuador"
-                      />
-                      <Picker.Item
-                        label="Escuela Politécnica del Ejército (ESPE)"
-                        value="Escuela Politécnica del Ejército"
-                      />
-                      <Picker.Item
-                        label="Escuela Sup. Politécnica del Litoral (ESPOL)"
-                        value="Escuela Sup. Politécnica del Litoral"
-                      />
-                      <Picker.Item
-                        label="Universidad Politécnica Salesiana (UPS)"
-                        value="Universidad Politécnica Salesiana"
-                      />
-                      <Picker.Item
-                        label="Universidad Andina Simón Bolívar (UASB)"
-                        value="Universidad Andina Simón Bolívar"
-                      />
-
-                      <Picker.Item
-                        label="Universidad Internacional del Ecuador (UIDE)"
-                        value="Universidad Internacional del Ecuador"
-                      />
-                      <Picker.Item
-                        label="Universidad San Francisco de Quito (USFQ)"
-                        value="Universidad San Francisco de Quito"
-                      />
-                      <Picker.Item
-                        label="Universidad Tecnológica Equinoccial (UTE)"
-                        value="Universidad Tecnológica Equinoccial"
-                      />
-                      <Picker.Item
-                        label="Universidad de las Américas (UDLA)"
-                        value="Universidad de las Américas"
-                      />
-                    </Picker>
-                  )}
-                />
-
-                <Controller
-                  name="memberType"
-                  control={control}
-                  defaultValue=""
-                  render={(props) => (
-                    <Picker
-                      enableModalBlur={false}
-                      topBarProps={{ title: "Rol en la universidad" }}
-                      style={{
-                        marginTop: 15,
-                        height: 45,
-                        paddingHorizontal: 15,
-                        borderColor: "#E8E8E8",
-                        borderWidth: 1,
-                        backgroundColor: "#F6F6F6",
-                        borderRadius: 5,
-                      }}
-                      placeholder="Escoje tu rol en la universidad"
-                      value={selectedValueMemberType}
-                      error={errors.memberType?.message}
-                      enableErrors={!!errors.memberType}
-                      onChange={(value) => {
-                        props.onChange(value.value);
-                        setSelectedValueMemberType(value.value);
-                      }}
-                    >
-                      <Picker.Item label="Estudiante" value="Estudiante" />
-                      <Picker.Item label="Docente" value="Docente" />
-                      <Picker.Item
-                        label="Administrativo"
-                        value="Administrativo"
-                      />
-                      <Picker.Item label="Servicios" value="Servicios" />
-                    </Picker>
-                  )}
-                />
-
-                <View row spread>
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                      marginBottom: -15,
+                    }}
+                  >
+                    Universidad
+                  </Text>
                   <Controller
+                    name="ies"
                     control={control}
-                    name="password"
                     defaultValue=""
                     render={(props) => (
-                      <TextField
-                        style={styles.textFieldPassword}
-                        placeholder="Contraseña"
-                        autoCapitalize={"none"}
-                        autoCorrect={false}
-                        textContentType={"password"}
-                        secureTextEntry={viewPassword}
-                        returnKeyType="go"
-                        onChangeText={(value) => {
-                          props.onChange(value);
+                      <Picker
+                        enableModalBlur={false}
+                        topBarProps={{ title: "Universidades" }}
+                        style={{
+                          marginTop: 15,
+                          height: 45,
+                          paddingHorizontal: 15,
+                          borderColor: "#E8E8E8",
+                          borderWidth: 1,
+                          backgroundColor: "#F6F6F6",
+                          borderRadius: 5,
                         }}
-                        error={errors.password?.message}
-                        enableErrors={!!errors.password}
-                      />
+                        showSearch
+                        searchPlaceholder={"Busca tu universidad"}
+                        searchStyle={{
+                          color: "black",
+                          placeholderTextColor: "black",
+                        }}
+                        placeholder="Escoje tu universidad"
+                        value={selectedValueIes}
+                        error={errors.ies?.message}
+                        enableErrors={!!errors.ies}
+                        onChange={(value) => {
+                          props.onChange(value.value);
+                          setSelectedValueIes(value.value);
+                        }}
+                      >
+                        <Picker.Item
+                          label="Escuela Politécnica Nacional (EPN)"
+                          value="Escuela Politécnica Nacional"
+                        />
+                        <Picker.Item
+                          label="Universidad Central del Ecuador (UCE)"
+                          value="Universidad Central del Ecuador"
+                        />
+                        <Picker.Item
+                          label="Pontificia Uni. Católica del Ecuador (PUCE)"
+                          value="Pontificia Uni. Católica del Ecuador"
+                        />
+                        <Picker.Item
+                          label="Escuela Politécnica del Ejército (ESPE)"
+                          value="Escuela Politécnica del Ejército"
+                        />
+                        <Picker.Item
+                          label="Escuela Sup. Politécnica del Litoral (ESPOL)"
+                          value="Escuela Sup. Politécnica del Litoral"
+                        />
+                        <Picker.Item
+                          label="Universidad Politécnica Salesiana (UPS)"
+                          value="Universidad Politécnica Salesiana"
+                        />
+                        <Picker.Item
+                          label="Universidad Andina Simón Bolívar (UASB)"
+                          value="Universidad Andina Simón Bolívar"
+                        />
+
+                        <Picker.Item
+                          label="Universidad Internacional del Ecuador (UIDE)"
+                          value="Universidad Internacional del Ecuador"
+                        />
+                        <Picker.Item
+                          label="Universidad San Francisco de Quito (USFQ)"
+                          value="Universidad San Francisco de Quito"
+                        />
+                        <Picker.Item
+                          label="Universidad Tecnológica Equinoccial (UTE)"
+                          value="Universidad Tecnológica Equinoccial"
+                        />
+                        <Picker.Item
+                          label="Universidad de las Américas (UDLA)"
+                          value="Universidad de las Américas"
+                        />
+                      </Picker>
                     )}
                   />
-                  <TouchableOpacity
-                    onPress={handleViewPassword}
-                    style={styles.viewPassword}
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                      marginBottom: -15,
+                    }}
                   >
-                    {viewPassword ? (
-                      <Octicons name="eye" size={30} color="black" />
-                    ) : (
-                      <Octicons name="eye-closed" size={30} color="black" />
+                    Rol que ocupa en la universidad
+                  </Text>
+                  <Controller
+                    name="memberType"
+                    control={control}
+                    defaultValue=""
+                    render={(props) => (
+                      <Picker
+                        enableModalBlur={false}
+                        topBarProps={{ title: "Rol en la universidad" }}
+                        style={{
+                          marginTop: 15,
+                          height: 45,
+                          paddingHorizontal: 15,
+                          borderColor: "#E8E8E8",
+                          borderWidth: 1,
+                          backgroundColor: "#F6F6F6",
+                          borderRadius: 5,
+                        }}
+                        placeholder="Escoje tu rol en la universidad"
+                        value={selectedValueMemberType}
+                        error={errors.memberType?.message}
+                        enableErrors={!!errors.memberType}
+                        onChange={(value) => {
+                          props.onChange(value.value);
+                          setSelectedValueMemberType(value.value);
+                        }}
+                      >
+                        <Picker.Item label="Estudiante" value="Estudiante" />
+                        <Picker.Item label="Docente" value="Docente" />
+                        <Picker.Item
+                          label="Administrativo"
+                          value="Administrativo"
+                        />
+                        <Picker.Item label="Servicios" value="Servicios" />
+                      </Picker>
                     )}
-                  </TouchableOpacity>
-                </View>
-              </View>
+                  />
 
-              <View>
-                <Button
-                  margin-15
-                  labelStyle={{
-                    fontWeight: "bold",
-                    fontSize: 20,
-                    padding: 5,
-                  }}
-                  enableShadow
-                  label="Crear mi cuenta"
-                  onPress={handleSubmit(onCreate)}
-                  style={{
-                    backgroundColor: "#E07A5F",
-                    margin: 20,
-                    marginTop: 45,
-                  }}
-                />
-                <Button
-                  color="white"
-                  labelStyle={{ fontWeight: "bold", fontSize: 20 }}
-                  margin-5
-                  link
-                  label="Iniciar sesión"
-                  onPress={() => navigation.navigate("LoginScreen")}
-                />
-              </View>
+                  <Text
+                    h6
+                    style={{
+                      marginTop: 7,
+                      marginBottom: -15,
+                    }}
+                  >
+                    Contraseña
+                  </Text>
+                  <View row spread>
+                    <Controller
+                      control={control}
+                      name="password"
+                      defaultValue=""
+                      render={(props) => (
+                        <TextField
+                          style={styles.textFieldPassword}
+                          placeholder="Contraseña"
+                          autoCapitalize={"none"}
+                          autoCorrect={false}
+                          textContentType={"password"}
+                          secureTextEntry={viewPassword}
+                          returnKeyType="go"
+                          onChangeText={(value) => {
+                            props.onChange(value);
+                          }}
+                          error={errors.password?.message}
+                          enableErrors={!!errors.password}
+                        />
+                      )}
+                    />
+                    <TouchableOpacity
+                      onPress={handleViewPassword}
+                      style={styles.viewPassword}
+                    >
+                      {viewPassword ? (
+                        <Octicons name="eye" size={30} color="black" />
+                      ) : (
+                        <Octicons name="eye-closed" size={30} color="black" />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View>
+                  <Button
+                    margin-15
+                    labelStyle={{
+                      fontWeight: "bold",
+                      fontSize: 20,
+                      padding: 5,
+                    }}
+                    enableShadow
+                    label="Crear mi cuenta"
+                    onPress={handleSubmit(onCreate)}
+                    style={{
+                      backgroundColor: "#E07A5F",
+                      margin: 20,
+                      marginTop: 25,
+                      marginBottom: 10,
+                    }}
+                  />
+                  <Button
+                    color="white"
+                    labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                    margin-5
+                    link
+                    label="Iniciar sesión"
+                    onPress={() => navigation.navigate("LoginScreen")}
+                  />
+                </View>
+              </ScrollView>
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>

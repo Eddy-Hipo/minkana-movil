@@ -58,11 +58,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   viewButtons: {
-    flex: 1,
     position: "absolute",
-    top: "80%",
-    left: "50%",
-    transform: [{ translateX: -Dimensions.get("window").width * 0.24 }],
+    top: "81%",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    margin: "auto",
   },
   background: {
     position: "absolute",

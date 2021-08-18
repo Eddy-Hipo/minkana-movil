@@ -142,8 +142,8 @@ const LandingScreen = ({ navigation }) => {
             loop={true}
             loopClonesPerSide={1}
             autoplay={true}
-            autoplayDelay={900}
-            autoplayInterval={7000}
+            autoplayDelay={800}
+            autoplayInterval={6000}
             renderItem={renderItem}
             sliderWidth={SLIDER_WIDTH}
             itemWidth={ITEM_WIDTH}
@@ -157,7 +157,7 @@ const LandingScreen = ({ navigation }) => {
             style={{
               flex: 1,
               position: "absolute",
-              top: "10%",
+              top: "73%",
               left: "50%",
               transform: [
                 { translateX: -Dimensions.get("window").width * 0.13 },
@@ -175,25 +175,27 @@ const LandingScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.viewButtons}>
-            <Button
-              style={{
-                backgroundColor: "#E07A5F",
-                marginBottom: 20,
-              }}
-              labelStyle={{ fontWeight: "bold", fontSize: 20 }}
-              label={"Iniciar sesión"}
-              onPress={() => navigation.navigate("LoginScreen")}
-            />
-            <Button
-              link
-              labelStyle={{
-                fontWeight: "bold",
-                fontSize: 20,
-                color: "white",
-              }}
-              label={"Crear una cuenta"}
-              onPress={() => navigation.navigate("RegisterScreen")}
-            />
+            <View style={{ marginRight: 70, marginLeft: 70 }}>
+              <Button
+                style={{
+                  backgroundColor: "#E07A5F",
+                  marginBottom: 20,
+                }}
+                labelStyle={{ fontWeight: "bold", fontSize: 20 }}
+                label={"Iniciar sesión"}
+                onPress={() => navigation.navigate("LoginScreen")}
+              />
+              <Button
+                link
+                labelStyle={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  color: "white",
+                }}
+                label={"Crear una cuenta"}
+                onPress={() => navigation.navigate("RegisterScreen")}
+              />
+            </View>
           </View>
         </SafeAreaView>
       </View>
