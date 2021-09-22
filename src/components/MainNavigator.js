@@ -13,6 +13,7 @@ import UserProfileScreen from "../screens/UserProfileScreen";
 import EditUserProfileScreen from "../screens/EditUserProfileScreen";
 import ReportScreen from "../screens/ReportScreen";
 import NotificationScreen from "../screens/NotificationsScreen";
+import NewsScreen from "../screens/NewsScreen";
 import { useAuth } from "../utils/auth";
 
 const Stack = createStackNavigator();
@@ -82,6 +83,23 @@ const MainStackNavigator = ({ navigation }) => {
         component={StatisticsScreen}
         options={{
           headerTitle: "Estadisticas",
+          headerStyle: {
+            backgroundColor: "#3D405B",
+            height: 100,
+          },
+          headerTitleStyle: {
+            color: "white",
+            fontSize: 25,
+          },
+          headerTintColor: "white",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="Noticias"
+        component={NewsScreen}
+        options={{
+          headerTitle: "Noticias",
           headerStyle: {
             backgroundColor: "#3D405B",
             height: 100,

@@ -121,7 +121,7 @@ const HomeScreen = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
-            <View center marginT-30>
+            <View marginR-25 marginL-25 marginT-30 spread row>
               <View center style={styles.cardHome}>
                 <TouchableOpacity
                   onPress={() => {
@@ -132,6 +132,20 @@ const HomeScreen = ({ navigation }) => {
                     <Entypo name="bar-graph" size={100} color="white" />
                     <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
                       Estadísticas
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View center style={styles.cardHome}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Noticias");
+                  }}
+                >
+                  <View center style={{ width: "100%", height: "100%" }}>
+                    <Entypo name="news" size={100} color="white" />
+                    <Text marginT-20 white h6 style={{ fontWeight: "bold" }}>
+                      Noticias
                     </Text>
                   </View>
                 </TouchableOpacity>
