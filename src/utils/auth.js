@@ -92,7 +92,7 @@ function useAuthProvider() {
             role: "ROLE_WHISTLEBLOWER",
             account: "Habilitada",
             photoProfile:
-              "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/profile%2FDefaultPhotoProfile.jpg?alt=media&token=8008e83d-ce03-4812-8c61-0f6c60803d52",
+              "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/profile%2FDefaultPhotoProfile.jpg?alt=media&token=d2cb8276-8f2f-4fb4-b855-98e0d26646c5",
           });
         });
       return true;

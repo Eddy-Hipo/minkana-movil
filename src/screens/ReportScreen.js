@@ -113,7 +113,7 @@ const ReportScreen = ({ navigation }) => {
           status: "Pendiente",
           emitionDate: moment().valueOf(),
           photoURL:
-            "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/places%2Fimagendenuncia.jpg?alt=media&token=02c8315f-8433-4167-b26f-58a3c59b5d0e",
+            "https://firebasestorage.googleapis.com/v0/b/minkana-5ca07.appspot.com/o/places%2FDefaultReport.jpg?alt=media&token=6a9b5eb2-5be8-436c-89fa-509b9f475b6b",
         };
       } else {
         const namePhoto =
