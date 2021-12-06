@@ -226,7 +226,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                               {item.status === "En proceso" ? (
                                 <View
                                   style={{
-                                    backgroundColor: "#E07A5F",
+                                    backgroundColor: "#F2CC8F",
                                     height: 40,
                                     padding: 9,
                                     borderRadius: 8.5,
@@ -239,7 +239,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                               ) : item.status === "Pendiente" ? (
                                 <View
                                   style={{
-                                    backgroundColor: "#C384D2",
+                                    backgroundColor: "#EF8969",
                                     height: 40,
                                     padding: 9,
                                     borderRadius: 8.5,
@@ -253,7 +253,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                                 item.veracity ? (
                                   <View
                                     style={{
-                                      backgroundColor: "#42AE27",
+                                      backgroundColor: "#64BD95",
                                       height: 40,
                                       padding: 9,
                                       borderRadius: 8.5,
@@ -264,13 +264,13 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                                       white
                                       style={{ fontWeight: "bold" }}
                                     >
-                                      Aceptada
+                                      Aceptado
                                     </Text>
                                   </View>
                                 ) : (
                                   <View
                                     style={{
-                                      backgroundColor: "red",
+                                      backgroundColor: "#EC6F46",
                                       height: 40,
                                       padding: 9,
                                       borderRadius: 8.5,
@@ -281,7 +281,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                                       white
                                       style={{ fontWeight: "bold" }}
                                     >
-                                      Rechazada
+                                      Rechazado
                                     </Text>
                                   </View>
                                 )
@@ -382,7 +382,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                             {item.status === "En proceso" ? (
                               <View
                                 style={{
-                                  backgroundColor: "#E07A5F",
+                                  backgroundColor: "#F2CC8F",
                                   height: 40,
                                   padding: 9,
                                   borderRadius: 8.5,
@@ -395,7 +395,7 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                             ) : item.status === "Pendiente" ? (
                               <View
                                 style={{
-                                  backgroundColor: "#C384D2",
+                                  backgroundColor: "#EF8969",
                                   height: 40,
                                   padding: 9,
                                   borderRadius: 8.5,
@@ -409,27 +409,27 @@ const ReportsByIES = ({ ies, onCancel, initialDateRef, finalDateRef }) => {
                               item.veracity ? (
                                 <View
                                   style={{
-                                    backgroundColor: "#42AE27",
+                                    backgroundColor: "#81B29A",
                                     height: 40,
                                     padding: 9,
                                     borderRadius: 8.5,
                                   }}
                                 >
                                   <Text h6 white style={{ fontWeight: "bold" }}>
-                                    Aceptada
+                                    Aceptado
                                   </Text>
                                 </View>
                               ) : (
                                 <View
                                   style={{
-                                    backgroundColor: "red",
+                                    backgroundColor: "#EC6F46",
                                     height: 40,
                                     padding: 9,
                                     borderRadius: 8.5,
                                   }}
                                 >
                                   <Text h6 white style={{ fontWeight: "bold" }}>
-                                    Rechazada
+                                    Rechazado
                                   </Text>
                                 </View>
                               )

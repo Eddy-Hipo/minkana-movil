@@ -200,6 +200,22 @@ const ReportInformation = ({ Report, onCancel, AttendedBy }) => {
                         >
                           Atendida - Aceptada
                         </Text>
+                        <Text
+                          h5
+                          style={{ fontWeight: "bold", marginBottom: 5 }}
+                        >
+                          Proceso a seguir
+                        </Text>
+                        <Text
+                          h7
+                          style={{
+                            marginBottom: 20,
+                            lineHeight: 24,
+                            textAlign: "justify",
+                          }}
+                        >
+                          {`1.- El administrador que atendió su denuncia se contactará por medio del correo electrónico proporcionado.\n 2.- Estar pendiente del correo electrónico para recibir más instrucciones. \n 3.- Dentro de un máximo de 5 días laborables el reporte se resolverá completamente.`}
+                        </Text>
                       </>
                     ) : (
                       <View>
